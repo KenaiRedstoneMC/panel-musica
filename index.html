@@ -71,6 +71,8 @@ button { font-size: 20px; }
 <div class="track"><span>Enchantress</span><button onclick="play('music/Two_Steps_From_Hell_-_Enchantress.mp3', this)">▶</button></div>
 <div class="track"><span>You Me (2)</span><button onclick="play('music/You__Me_320.mp3', this)">▶</button></div>
 
+<audio id="player" controls style="width:100%; margin-top:10px;"></audio>
+
 <script>
 const player = document.getElementById("player");
 player.volume = 1;
