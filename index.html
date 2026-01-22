@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Panel de Música</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎪 Panel Música Circo AC</title>
+
 <style>
   body {
-    background: #0b0c10;
-    color: #e5e5e5;
-    font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
+    background: #0a0b10;
+    color: #e9e9e9;
+    font-family: Arial, sans-serif;
   }
 
   .container {
     max-width: 1100px;
-    margin: 40px auto;
+    margin: 30px auto;
     padding: 20px;
-    background: rgba(20, 20, 20, 0.9);
     border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.7);
     position: relative;
     overflow: hidden;
+    background: rgba(20,20,20,0.9);
+    box-shadow: 0 0 20px rgba(0,0,0,0.7);
   }
 
-  /* LED MULTICOLOR */
+  /* LED Multicolor */
   .container::before {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: 20px;
     padding: 3px;
+    border-radius: 20px;
     background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff, #ff00ff, #00ffff, #ffff00);
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
             mask-composite: exclude;
-    animation: ledGlow 3.5s linear infinite;
+    animation: ledGlow 4s linear infinite;
     pointer-events: none;
   }
 
@@ -48,23 +48,26 @@
 
   h1 {
     text-align: center;
+    margin: 0;
+    padding: 10px 0;
     font-size: 2rem;
-    margin-bottom: 10px;
   }
 
   .controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin: 20px 0;
   }
 
-  .controls input[type="text"] {
-    width: 60%;
+  .controls input {
+    flex: 1;
     padding: 10px;
     border-radius: 10px;
     border: none;
     outline: none;
+    font-size: 1rem;
   }
 
   .controls button {
@@ -81,32 +84,53 @@
     background: #2e2e2e;
   }
 
+  .volume {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .volume input {
+    width: 160px;
+  }
+
   .song-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 15px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
   }
 
   .song-item {
-    background: rgba(255, 255, 255, 0.06);
-    padding: 15px;
+    background: rgba(255,255,255,0.06);
     border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
     gap: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    transition: transform .2s;
   }
 
-  .song-item h3 {
+  .song-item:hover {
+    transform: translateY(-3px);
+  }
+
+  .song-title {
     margin: 0;
     font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 10px;
   }
 
   .song-item button {
-    width: 100%;
+    flex: 1;
     padding: 10px;
     border-radius: 10px;
     border: none;
@@ -120,35 +144,36 @@
     background: #2e2e2e;
   }
 
-  .volume {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .active {
+    background: #00ff7f !important;
+    color: #000 !important;
   }
 
-  .volume input {
-    width: 150px;
+  .indicator {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 1.1rem;
+    font-weight: bold;
   }
 
-  audio {
-    width: 100%;
-    margin-top: 10px;
-  }
 </style>
 </head>
+
 <body>
 
 <div class="container">
-  <h1>Panel de Música</h1>
+  <h1>🎪 Panel Música Circo AC</h1>
 
   <div class="controls">
-    <input type="text" id="search" placeholder="Buscar música..." />
+    <input id="search" type="text" placeholder="Buscar música...">
     <div class="volume">
       <label for="volume">Volumen</label>
-      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
+      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.8">
     </div>
     <button id="stopAll">Stop general</button>
   </div>
+
+  <div class="indicator" id="indicator">Ninguna canción seleccionada</div>
 
   <ul class="song-list" id="songList"></ul>
 </div>
@@ -187,7 +212,6 @@ const songs = [
   "Marimba no. 7 - Luzia-yt.savetube.me.mp3",
   "Minecraft 1.21.7 New Music Disc _Lava Chicken_ [ChEkbiBzILc].mp3",
   "Most_Epic_Music_Ever___The_Wolf_And_The_Moon__BrunuhVille.mp3",
-  "MusicaMalabares.mp3",
   "My_Beauty.mp3",
   "Música-para-malabares-_-Circo-_ff8nEfOyzr4_-RECORTADO-A-MEJOR-‐-Hecho-con-Clipchamp.mp3",
   "NEW__KURIOS_Music__Lyrics_-_Sing_Along_with_us_____Steampunk_Telegram____Cirque_du_Soleil_DoZ293Y1jzo.mp3",
@@ -224,40 +248,59 @@ const songs = [
   "ummet-ozcan-xanadu-mongolian-techno-128-ytshorts.savetube.me.mp3"
 ];
 
-// Quitar supernova
-const filteredSongs = songs.filter(song => !song.toLowerCase().includes("supernova"));
+// Filtrar repetidas + quitar "MusicaMalabares"
+const uniqueSongs = [...new Set(songs)]
+  .filter(s => !s.toLowerCase().includes("musicamalabares"))
+  .filter(s => !s.toLowerCase().includes("musica malabares"))
+  .filter(s => !s.toLowerCase().includes("supernova"));
 
-// Ordenar alfabéticamente
-filteredSongs.sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }));
+uniqueSongs.sort((a,b) => a.localeCompare(b, "es", { sensitivity: "base" }));
 
 const songList = document.getElementById("songList");
 const search = document.getElementById("search");
 const stopAllBtn = document.getElementById("stopAll");
 const volume = document.getElementById("volume");
+const indicator = document.getElementById("indicator");
 
 let audios = [];
+let activeAudio = null;
+let activeItem = null;
 
 function createSongItem(songName) {
   const li = document.createElement("li");
   li.className = "song-item";
 
   const title = document.createElement("h3");
+  title.className = "song-title";
   title.textContent = songName;
 
   const audio = document.createElement("audio");
   audio.src = "music/" + songName;
-  audio.loop = false;
+  audio.volume = volume.value;
 
   const playBtn = document.createElement("button");
   playBtn.textContent = "Play";
   playBtn.onclick = () => {
-    stopAll();
+    if (activeAudio && activeAudio !== audio) {
+      stopAll();
+    }
+    activeAudio = audio;
+    activeItem = li;
     audio.play();
+    indicator.textContent = "Sonando: " + songName;
+    li.classList.add("active");
   };
 
   const stopBtn = document.createElement("button");
   stopBtn.textContent = "Stop";
-  stopBtn.onclick = () => audio.pause();
+  stopBtn.onclick = () => {
+    audio.pause();
+    audio.currentTime = 0;
+    if (activeItem === li) {
+      indicator.textContent = "Ninguna canción seleccionada";
+      li.classList.remove("active");
+    }
+  };
 
   li.appendChild(title);
   li.appendChild(playBtn);
@@ -278,11 +321,13 @@ function stopAll() {
     a.pause();
     a.currentTime = 0;
   });
+  if (activeItem) activeItem.classList.remove("active");
+  indicator.textContent = "Ninguna canción seleccionada";
 }
 
 search.addEventListener("input", () => {
   const term = search.value.toLowerCase();
-  const filtered = filteredSongs.filter(song => song.toLowerCase().includes(term));
+  const filtered = uniqueSongs.filter(song => song.toLowerCase().includes(term));
   renderList(filtered);
 });
 
@@ -292,7 +337,8 @@ volume.addEventListener("input", () => {
 
 stopAllBtn.addEventListener("click", stopAll);
 
-renderList(filteredSongs);
+renderList(uniqueSongs);
 </script>
+
 </body>
 </html>
