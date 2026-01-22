@@ -8,59 +8,85 @@
 
 <style>
   body {
-    background: #000;
+    background: #050505;
     color: #fff;
     font-family: Arial, sans-serif;
-    padding: 10px;
-    margin: 0;
-  }
-  .container {
-    max-width: 900px;
-    margin: auto;
     padding: 20px;
-    background: #111;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
   }
+
   h1 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    font-size: 28px;
   }
-  .track {
-    background: #222;
-    padding: 14px;
-    margin: 10px 0;
-    border-radius: 15px;
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    margin-bottom: 20px;
   }
+
+  .loop-btn {
+    background: #1e1e1e;
+    border: 1px solid #444;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+  }
+
+  .loop-btn.active {
+    background: #00ff7f;
+    color: #000;
+    border-color: #00ff7f;
+  }
+
+  .track {
+    background: #111;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .track.active {
     background: #00ff7f;
     color: #000;
   }
-  .track span {
+
+  .track-name {
+    flex: 1;
+    padding-right: 10px;
     font-size: 16px;
-    font-weight: bold;
   }
-  .controls {
-    display: flex;
-    gap: 8px;
-  }
+
   button {
     font-size: 16px;
     padding: 8px 12px;
     border-radius: 10px;
     border: none;
     cursor: pointer;
-    font-weight: bold;
+    background: #1e1e1e;
+    color: #fff;
   }
-  .play-btn { background: #00ff7f; color: #000; }
-  .stop-btn { background: #ff4d4d; color: #000; }
-  audio {
+
+  button:hover {
+    background: #333;
+  }
+
+  .audio-player {
     width: 100%;
     margin-top: 10px;
+    background: #111;
+    border-radius: 12px;
   }
 </style>
 </head>
@@ -69,520 +95,124 @@
 <div class="container">
   <h1>🎪 Panel Música Circo AC</h1>
 
-  <!-- 1 -->
-  <div class="track" data-src="music/1- Skylanders SuperChargers.mp3">
-    <span>Skylanders SuperChargers</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
+  <div class="controls">
+    <span>Repetir canción:</span>
+    <button id="loopBtn" class="loop-btn">OFF</button>
   </div>
 
-  <!-- 2 -->
-  <div class="track" data-src="music/2- 1_2_3.mp3">
-    <span>1, 2, 3</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
+  <div id="tracks"></div>
 
-  <!-- 3 -->
-  <div class="track" data-src="music/3- Supernova (aespa).mp3">
-    <span>Supernova (aespa)</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 4 -->
-  <div class="track" data-src="music/4- APT.mp3">
-    <span>APT</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 5 -->
-  <div class="track" data-src="music/5- Bailes Burgaleses.mp3">
-    <span>Bailes Burgaleses</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 6 -->
-  <div class="track" data-src="music/6- Barefoot Adventures.mp3">
-    <span>Barefoot Adventures</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 7 -->
-  <div class="track" data-src="music/7- Bella Donna Twist.mp3">
-    <span>Bella Donna Twist</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 8 -->
-  <div class="track" data-src="music/8- Bling Bang Bang Born.mp3">
-    <span>Bling Bang Bang Born</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 9 -->
-  <div class="track" data-src="music/9- Intocables.mp3">
-    <span>Intocables</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 10 -->
-  <div class="track" data-src="music/10- Cars 2 (Main Menu).mp3">
-    <span>Cars 2 (Main Menu)</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 11 -->
-  <div class="track" data-src="music/11- Charleston.mp3">
-    <span>Charleston</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 12 -->
-  <div class="track" data-src="music/12- Ay Mama.mp3">
-    <span>Ay Mama</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 13 -->
-  <div class="track" data-src="music/13- Clouds.mp3">
-    <span>Clouds</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 14 -->
-  <div class="track" data-src="music/14- Dai Allegri Musicanti.mp3">
-    <span>Dai Allegri Musicanti</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 15 -->
-  <div class="track" data-src="music/15- Epic Emotional.mp3">
-    <span>Epic Emotional</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 16 -->
-  <div class="track" data-src="music/16- Gurenge (Lisa).mp3">
-    <span>Gurenge (Lisa)</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 17 -->
-  <div class="track" data-src="music/17- Ilargi Berriak.mp3">
-    <span>Ilargi Berriak</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 18 -->
-  <div class="track" data-src="music/18- Knife Party - LRAD.mp3">
-    <span>Knife Party - LRAD</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 19 -->
-  <div class="track" data-src="music/19- La Invasión.mp3">
-    <span>La Invasión</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 20 -->
-  <div class="track" data-src="music/20- Las Águilas.mp3">
-    <span>Las Águilas</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 21 -->
-  <div class="track" data-src="music/21- Los Gavilanes.mp3">
-    <span>Los Gavilanes</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 22 -->
-  <div class="track" data-src="music/22- Los Halcones.mp3">
-    <span>Los Halcones</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 23 -->
-  <div class="track" data-src="music/23- Luminary.mp3">
-    <span>Luminary</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 24 -->
-  <div class="track" data-src="music/24- Mahalageasca.mp3">
-    <span>Mahalageasca</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 25 -->
-  <div class="track" data-src="music/25- Malaguena.mp3">
-    <span>Malaguena</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 26 -->
-  <div class="track" data-src="music/26- Marimba No. 7.mp3">
-    <span>Marimba No. 7</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 27 -->
-  <div class="track" data-src="music/27- Lava Chicken.mp3">
-    <span>Lava Chicken</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 28 -->
-  <div class="track" data-src="music/28- Most Epic Ever.mp3">
-    <span>Most Epic Ever</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 29 -->
-  <div class="track" data-src="music/29- Musica Circo Chile 2019.mp3">
-    <span>Musica Circo Chile 2019</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 30 -->
-  <div class="track" data-src="music/30- Musica Gran Final.mp3">
-    <span>Musica Gran Final</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 31 -->
-  <div class="track" data-src="music/31- Musica Epica Sin Copyright.mp3">
-    <span>Musica Epica Sin Copyright</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 32 -->
-  <div class="track" data-src="music/32- Musica Malabares (Ingles).mp3">
-    <span>Musica Malabares (Ingles)</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 33 -->
-  <div class="track" data-src="music/33- Malabares 1.mp3">
-    <span>Malabares 1</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 34 -->
-  <div class="track" data-src="music/34- Musica Malabares.mp3">
-    <span>Musica Malabares</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 35 -->
-  <div class="track" data-src="music/35- My Beauty.mp3">
-    <span>My Beauty</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 36 -->
-  <div class="track" data-src="music/36- Nails Hair Hips Heels.mp3">
-    <span>Nails Hair Hips Heels</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 37 -->
-  <div class="track" data-src="music/37- Kurios.mp3">
-    <span>Kurios</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 38 -->
-  <div class="track" data-src="music/38- Party Rockin.mp3">
-    <span>Party Rockin</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 39 -->
-  <div class="track" data-src="music/39- Mentirosa.mp3">
-    <span>Mentirosa</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 40 -->
-  <div class="track" data-src="music/40- Resist and Express.mp3">
-    <span>Resist and Express</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 41 -->
-  <div class="track" data-src="music/41- Si por mi fuera.mp3">
-    <span>Si por mi fuera</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 42 -->
-  <div class="track" data-src="music/42- Stomps Sonic.mp3">
-    <span>Stomps Sonic</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 43 -->
-  <div class="track" data-src="music/43- Superstar.mp3">
-    <span>Superstar</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 44 -->
-  <div class="track" data-src="music/44- Top 40 Jugglers 2023.mp3">
-    <span>Top 40 Jugglers 2023</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 45 -->
-  <div class="track" data-src="music/45- Thunderstruck.mp3">
-    <span>Thunderstruck</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 46 -->
-  <div class="track" data-src="music/46- Espresso Macchiato.mp3">
-    <span>Espresso Macchiato</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 47 -->
-  <div class="track" data-src="music/47- Epica 2.mp3">
-    <span>Epica 2</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 48 -->
-  <div class="track" data-src="music/48- You Me.mp3">
-    <span>You Me</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 49 -->
-  <div class="track" data-src="music/49- You Must Be Joking.mp3">
-    <span>You Must Be Joking</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 50 -->
-  <div class="track" data-src="music/50- Tuchat Quevedo.mp3">
-    <span>Tuchat Quevedo</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 51 -->
-  <div class="track" data-src="music/51- The Trooper.mp3">
-    <span>The Trooper</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 52 -->
-  <div class="track" data-src="music/52- Enchantress.mp3">
-    <span>Enchantress</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <!-- 53 -->
-  <div class="track" data-src="music/53- You Me (2).mp3">
-    <span>You Me (2)</span>
-    <div class="controls">
-      <button class="play-btn" onclick="play(this)">▶</button>
-      <button class="stop-btn" onclick="stop()">■</button>
-    </div>
-  </div>
-
-  <audio id="player" controls></audio>
-  <div style="margin-top: 10px; display: flex; justify-content: space-between; gap: 10px;">
-    <label>
-      <input type="checkbox" id="loop"> Repetir
-    </label>
-    <label>
-      Volumen: <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
-    </label>
-  </div>
+  <audio id="player" controls class="audio-player"></audio>
 </div>
 
 <script>
-  const player = document.getElementById("player");
-  const volume = document.getElementById("volume");
-  const loop = document.getElementById("loop");
+const player = document.getElementById("player");
+const tracksContainer = document.getElementById("tracks");
+const loopBtn = document.getElementById("loopBtn");
 
-  volume.addEventListener("input", () => {
-    player.volume = volume.value;
+player.volume = 1;
+
+let loopOn = false;
+loopBtn.addEventListener("click", () => {
+  loopOn = !loopOn;
+  player.loop = loopOn;
+  loopBtn.textContent = loopOn ? "ON" : "OFF";
+  loopBtn.classList.toggle("active", loopOn);
+});
+
+const tracks = [
+  {name:"Main Theme (Skylanders SuperChargers)", file:"[♪♫] Main Theme (Main Menu) _ Skylanders SuperChargers Music [FV1QbTT5hy8].mp3"},
+  {name:"1, 2, 3", file:"1_2_3.mp3"},
+  {name:"Supernova Dance Cover", file:"aespa - supernova dance cover by rubén holgado.mp3"},
+  {name:"APT", file:"APT. - Sped up Nightcore.mp3"},
+  {name:"Bailes Burgaleses (Puy du Fou)", file:"Bailes Burgaleses (feat. Guilhem Desq) - extrait du spectacle _El Último Cantar_ - Puy du Fou España.mp3"},
+  {name:"Bella Donna Twist", file:"Bella Donna Twist [1TgyohHqYPs].mp3"},
+  {name:"Bling Bang Born", file:"Bling-Bang-Bang-Born.mp3"},
+  {name:"Intocables", file:"blocks-intocables.mp3"},
+  {name:"Cars 2 (Main Menu)", file:"Cars 2 ( Its Finn Mcmissile) Soundtrack [AAW2Qd9_Vt4].mp3"},
+  {name:"Charleston", file:"Charleston del Siglo de Plata (feat. Richard Harvey).mp3"},
+  {name:"Ay Mama", file:"Chayanne_-_Ay_Mama.mp3"},
+  {name:"Clouds", file:"Clouds_FYsnaLesV3o.mp3"},
+  {name:"Dai Allegri Musicanti", file:"Dai Allegri Musicanti [B3PS5n-nVuc].mp3"},
+  {name:"Epic Emotional", file:"epic-emotional_long-197089.mp3"},
+  {name:"Gurenge Lisa", file:"gurenge-lisa.mp3"},
+  {name:"Ilargi Berriak", file:"Ilargi Berriak.mp3"},
+  {name:"Knife Party - LRAD", file:"Knife_Party_-_LRAD_Original_Mix.mp3"},
+  {name:"La Invasión", file:"La Invasión (feat. Pedro Eustache & London Voices).mp3"},
+  {name:"Las Águilas", file:"Las Águilas - La Música del Espectáculo _Puy du Fou - España_.mp3"},
+  {name:"Los Gavilanes", file:"Los Gavilanes - extrait du spectacle _Cetrería de Reyes_ - Puy du Fou España.mp3"},
+  {name:"Los Halcones", file:"Los Halcones - La Música del Espectáculo _Puy du Fou - España_.mp3"},
+  {name:"Luminary", file:"Luminary.mp3"},
+  {name:"Mahalageasca", file:"Mahalageasca - Bucovina Dub.mp3"},
+  {name:"Malagueña", file:"Malaguena.mp3"},
+  {name:"Marimba no. 7", file:"Marimba no. 7 - Luzia-yt.savetube.me.mp3"},
+  {name:"Lava Chicken", file:"Minecraft 1.21.7 New Music Disc _Lava Chicken_ [ChEkbiBzILc].mp3"},
+  {name:"Most Epic Ever", file:"Most_Epic_Music_Ever___The_Wolf_And_The_Moon__BrunuhVille.mp3"},
+  {name:"Música Circo Chile 2019", file:"musica-de-circo-chile-2019-128-ytshorts.savetube.me.mp3"},
+  {name:"Gran Final", file:"musica-de-circo-gran-final-128-ytshorts.savetube.me.mp3"},
+  {name:"Música épica sin copyright", file:"musica-epica-sin-copyright-gratis-7-128-ytshorts.savetube.me.mp3"},
+  {name:"Musica Malabares (ingles)", file:"MusicaMalabares.mp3"},
+  {name:"Musica Malabares 1", file:"musica-malabares1-‐-Hecho-con-Clipchamp.mp3"},
+  {name:"Musica Malabares", file:"Música-para-malabares-_-Circo-_ff8nEfOyzr4_-RECORTADO-A-MEJOR-‐-Hecho-con-Clipchamp.mp3"},
+  {name:"My Beauty", file:"My_Beauty.mp3"},
+  {name:"Nails Hair Hips Heels", file:"Nails_Hair_Hips_Heels_Remix.mp3"},
+  {name:"Kurios", file:"NEW__KURIOS_Music__Lyrics_-_Sing_Along_with_us_____Steampunk_Telegram____Cirque_du_Soleil_DoZ293Y1jzo.mp3"},
+  {name:"Party Rockin", file:"Party Rockin.mp3"},
+  {name:"Mentirosa", file:"Rafaga-Mentirosa.mp3"},
+  {name:"Resist and Express", file:"Resist and Express.mp3"},
+  {name:"Si por mi fuera", file:"SI-POR-MI-FUERA-‐-Hecho-con-Clipchamp.mp3"},
+  {name:"Stomps Sonic", file:"stomps-sonic-stomps-232226.mp3"},
+  {name:"Superstar", file:"Superstar I [6nSTUK75Prg].mp3"},
+  {name:"Top 40 Jugglers 2023", file:"The Top 40 Jugglers of 2023.mp3"},
+  {name:"Thunderstruck", file:"thunderstruck-128-ytshorts.savetube.me.mp3"},
+  {name:"Espresso Macchiato", file:"TOMMY CASH - ESPRESSO MACCHIATO.mp3"},
+  {name:"You Me", file:"You__Me_320.mp3"},
+  {name:"You Must Be Joking", file:"You_Must_Be_Joking.mp3"},
+  {name:"Tuchat Quevedo", file:"TUCHAT - Quevedo (Official Video).mp3"},
+  {name:"The Trooper", file:"Iron_Maiden_-_The_Trooper_1998_Remastered_Version_1998_Remastered_Version_(FeelMP3.com).mp3"},
+  {name:"Enchantress", file:"Two_Steps_From_Hell_-_Enchantress.mp3"},
+  {name:"Stal Experience", file:"stal-experience_vadim_lisikov.mp3"}
+];
+
+function safePath(file) {
+  return "music/" + encodeURIComponent(file).replace(/%2F/g, "/");
+}
+
+function createTracks() {
+  tracks.forEach(track => {
+    const div = document.createElement("div");
+    div.className = "track";
+
+    const name = document.createElement("span");
+    name.className = "track-name";
+    name.textContent = track.name;
+
+    const playBtn = document.createElement("button");
+    playBtn.textContent = "▶";
+    playBtn.onclick = () => {
+      document.querySelectorAll(".track").forEach(t => t.classList.remove("active"));
+      div.classList.add("active");
+      player.src = safePath(track.file);
+      player.play();
+    };
+
+    const stopBtn = document.createElement("button");
+    stopBtn.textContent = "⏹";
+    stopBtn.onclick = () => {
+      player.pause();
+      player.currentTime = 0;
+      div.classList.remove("active");
+    };
+
+    div.appendChild(name);
+    div.appendChild(playBtn);
+    div.appendChild(stopBtn);
+
+    tracksContainer.appendChild(div);
   });
+}
 
-  loop.addEventListener("change", () => {
-    player.loop = loop.checked;
-  });
-
-  function play(btn) {
-    document.querySelectorAll('.track').forEach(t => t.classList.remove('active'));
-    const track = btn.closest('.track');
-    track.classList.add('active');
-    player.src = track.getAttribute("data-src");
-    player.play();
-  }
-
-  function stop() {
-    player.pause();
-    player.currentTime = 0;
-    document.querySelectorAll('.track').forEach(t => t.classList.remove('active'));
-  }
+createTracks();
 </script>
 </body>
 </html>
