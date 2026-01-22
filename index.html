@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>🎪 Panel Música Circo AC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+
+<style>
+body { background: #000; color: #fff; font-family: Arial, sans-serif; padding: 10px; }
+h1 { text-align: center; }
+.track { background: #222; padding: 12px; margin: 8px 0; border-radius: 10px; display: flex; justify-content: space-between; }
+.track.active { background: #00ff7f; color: #000; }
+button { font-size: 20px; }
+</style>
+</head>
+
+<body>
+<h1>🎪 Panel Música</h1>
+
+<!-- Aquí van tus canciones -->
+
+<audio id="player"></audio>
+
+<script>
+const player = document.getElementById("player");
+player.volume = 1;
+
+function play(src, btn) {
+  document.querySelectorAll('.track').forEach(t => t.classList.remove('active'));
+  btn.parentElement.classList.add('active');
+  player.src = src;
+  player.play();
+}
+</script>
+
+</body>
+</html>
