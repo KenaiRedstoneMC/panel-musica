@@ -149,6 +149,11 @@
     box-shadow: 0 0 20px rgba(255,255,255,0.2);
   }
 
+  .song input[type="range"]{
+    width:100%;
+    margin-top:12px;
+  }
+
   .indicator{
     margin-top:20px;
     font-size:22px;
@@ -161,7 +166,8 @@
   }
 
   .active{
-    border-color: #00ffae;
+    border-color: #00ff5c !important;
+    box-shadow: 0 0 25px rgba(0,255,92,0.35);
   }
 </style>
 </head>
@@ -260,10 +266,16 @@ const songs = [
 songs.sort();
 
 let currentAudio = null;
-let loopMode = false; // LOOP GENERAL
+let loopMode = false;
 
 const musicList = document.getElementById("musicList");
 const activeSong = document.getElementById("activeSong");
+
+function formatTime(sec){
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m}:${s < 10 ? "0" + s : s}`;
+}
 
 function renderSongs(filter=""){
   musicList.innerHTML = "";
@@ -282,9 +294,23 @@ function renderSongs(filter=""){
       const stopBtn = document.createElement("button");
       stopBtn.textContent = "STOP";
 
+      const timeBar = document.createElement("input");
+      timeBar.type = "range";
+      timeBar.min = 0;
+      timeBar.max = 100;
+      timeBar.value = 0;
+
+      const timeText = document.createElement("div");
+      timeText.style.marginTop = "8px";
+      timeText.style.fontSize = "14px";
+      timeText.textContent = "0:00 / 0:00";
+
       songDiv.appendChild(title);
       songDiv.appendChild(playBtn);
       songDiv.appendChild(stopBtn);
+      songDiv.appendChild(timeBar);
+      songDiv.appendChild(timeText);
+
       musicList.appendChild(songDiv);
 
       const audio = new Audio(`music/${song}`);
@@ -300,12 +326,31 @@ function renderSongs(filter=""){
         audio.loop = loopMode;
         audio.play();
         setActive(songDiv, song);
+
+        audio.addEventListener("loadedmetadata", () => {
+          timeText.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+        });
+
+        audio.addEventListener("timeupdate", () => {
+          const progress = (audio.currentTime / audio.duration) * 100;
+          timeBar.value = progress;
+          timeText.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+        });
       };
 
       stopBtn.onclick = () => {
         audio.pause();
         audio.currentTime = 0;
+        timeBar.value = 0;
+        timeText.textContent = "0:00 / 0:00";
         if(currentAudio === audio) clearActive();
+      };
+
+      timeBar.oninput = () => {
+        if(audio.duration){
+          const seekTime = (timeBar.value / 100) * audio.duration;
+          audio.currentTime = seekTime;
+        }
       };
 
       document.getElementById("volume").oninput = (e) => {
