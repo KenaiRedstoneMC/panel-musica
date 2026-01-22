@@ -3,44 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel Música - Circo AC</title>
+<title>Panel de Música</title>
 <style>
   body{
-    background: #070A13;
-    color: #EAEAF2;
+    background: #0b0f1a;
+    color: #fff;
     font-family: Arial, sans-serif;
     margin:0;
     padding:0;
-    overflow-x:hidden;
-  }
-
-  /* FONDO CON LUCES 3D */
-  .bg {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at 20% 20%, rgba(255,0,140,0.25), transparent 40%),
-                radial-gradient(circle at 80% 30%, rgba(0,255,255,0.20), transparent 45%),
-                radial-gradient(circle at 50% 80%, rgba(0,255,140,0.18), transparent 50%);
-    filter: blur(20px);
-    z-index:-1;
-    animation: floatBg 10s ease-in-out infinite;
-  }
-  @keyframes floatBg{
-    0%{transform: translate(0,0);}
-    50%{transform: translate(30px,-20px);}
-    100%{transform: translate(0,0);}
   }
 
   .container{
     max-width: 1100px;
-    margin: auto;
-    padding: 20px;
+    margin:auto;
+    padding:20px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0,0,0,0.7);
+    background: #0b0f1a;
+  }
+
+  .container::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius: 20px;
+    padding: 3px;
+    background: linear-gradient(90deg, #ff005c, #ffb400, #33ff5f, #00d2ff, #a200ff, #ff005c);
+    background-size: 300% 300%;
+    animation: led 5s linear infinite;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index:0;
+  }
+
+  @keyframes led{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+
+  .container > *{
+    position: relative;
+    z-index:1;
   }
 
   h1{
     text-align:center;
     margin-bottom:20px;
-    text-shadow: 0 0 20px rgba(255,255,255,0.3);
   }
 
   .search{
@@ -55,8 +69,7 @@
     border:none;
     outline:none;
     font-size:16px;
-    background: rgba(255,255,255,0.08);
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    background: rgba(255,255,255,0.1);
   }
 
   .controls{
@@ -73,90 +86,89 @@
     font-weight:bold;
   }
   .controls button{
-    background: #2B2E4A;
-    color:#EAEAF2;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    background: #222;
+    color:#fff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.6);
   }
   .controls input{
     width:200px;
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.1);
   }
 
   .music-list{
     display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 15px;
   }
 
-  /* TARJETA CON LUCES 3D */
   .song{
-    border-radius:22px;
-    padding:18px;
-    background: rgba(255,255,255,0.05);
-    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    border-radius:18px;
+    padding:16px;
+    background: rgba(255,255,255,0.06);
     position:relative;
     overflow:hidden;
-    transform-style: preserve-3d;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .song:hover{
-    transform: translateY(-6px) rotateX(2deg) rotateY(-2deg);
-    box-shadow: 0 0 30px rgba(0,0,0,0.7), 0 0 30px rgba(255,0,140,0.2);
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    border: 2px solid rgba(255,255,255,0.12);
   }
 
-  /* LUCES LED MULTICOLOR 3D */
-  .song::before{
-    content:"";
-    position:absolute;
-    inset:-3px;
-    background: linear-gradient(90deg, #ff005c, #ffb400, #33ff5f, #00d2ff, #a200ff, #ff005c);
-    background-size: 600% 600%;
-    animation: led 6s linear infinite;
-    filter: blur(12px);
-    z-index:0;
-    transform: translateZ(-1px);
-  }
   .song::after{
     content:"";
     position:absolute;
     inset:0;
-    background: rgba(0,0,0,0.55);
-    z-index:1;
+    border-radius:18px;
+    border: 2px solid transparent;
+    background: linear-gradient(90deg, #ff005c, #ffb400, #33ff5f, #00d2ff, #a200ff, #ff005c);
+    background-size: 300% 300%;
+    animation: led 5s linear infinite;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    pointer-events:none;
+    z-index:0;
   }
 
-  @keyframes led{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-  }
+  .song > *{ position:relative; z-index:1; }
 
-  .song > *{ position:relative; z-index:2; }
   .song h3{
     margin:0 0 12px 0;
     font-size:18px;
   }
+
   .song button{
     margin-right:10px;
-    background:#1f1f2e;
-    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    background:#222;
+    color:#fff;
+    border-radius:12px;
+    padding:10px 12px;
+    cursor:pointer;
+    box-shadow: 0 0 18px rgba(0,0,0,0.6);
   }
-  .active{
-    border:2px solid #00ffae;
+
+  .song button:hover{
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
   }
 
   .indicator{
-    margin-top:10px;
-    font-size:14px;
-    color:#b8b8c8;
+    margin-top:20px;
+    font-size:22px;
+    text-align:center;
+    padding:12px;
+    border-radius:16px;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.14);
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+  }
+
+  .active{
+    border-color: #00ffae;
   }
 </style>
 </head>
 <body>
 
-<div class="bg"></div>
-
 <div class="container">
-  <h1>Panel de Música - Circo AC</h1>
+  <h1>Panel de Música</h1>
 
   <div class="search">
     <input id="search" placeholder="Buscar canción...">
@@ -164,7 +176,10 @@
 
   <div class="controls">
     <button id="stopAll">STOP GENERAL</button>
-    <label>Volumen: <input id="volume" type="range" min="0" max="1" step="0.01" value="0.8"></label>
+    <label>
+      Volumen: <input id="volume" type="range" min="0" max="1" step="0.01" value="0.8">
+    </label>
+    <button id="loopAll">LOOP GENERAL: OFF</button>
   </div>
 
   <div class="music-list" id="musicList"></div>
@@ -242,15 +257,14 @@ const songs = [
   "ummet-ozcan-xanadu-mongolian-techno-128-ytshorts.savetube.me.mp3"
 ];
 
-// ORDENAR ALFABETICAMENTE
 songs.sort();
 
 let currentAudio = null;
-let loopMode = false;
+let loopMode = false; // LOOP GENERAL
+
 const musicList = document.getElementById("musicList");
 const activeSong = document.getElementById("activeSong");
 
-// RENDER DE CANCIONES
 function renderSongs(filter=""){
   musicList.innerHTML = "";
   songs
@@ -268,17 +282,14 @@ function renderSongs(filter=""){
       const stopBtn = document.createElement("button");
       stopBtn.textContent = "STOP";
 
-      const loopBtn = document.createElement("button");
-      loopBtn.textContent = "LOOP";
-
       songDiv.appendChild(title);
       songDiv.appendChild(playBtn);
       songDiv.appendChild(stopBtn);
-      songDiv.appendChild(loopBtn);
       musicList.appendChild(songDiv);
 
       const audio = new Audio(`music/${song}`);
       audio.volume = document.getElementById("volume").value;
+      audio.loop = loopMode;
 
       playBtn.onclick = () => {
         if(currentAudio && currentAudio !== audio){
@@ -297,12 +308,6 @@ function renderSongs(filter=""){
         if(currentAudio === audio) clearActive();
       };
 
-      loopBtn.onclick = () => {
-        loopMode = !loopMode;
-        audio.loop = loopMode;
-        loopBtn.style.background = loopMode ? "#00ffae" : "#1f1f2e";
-      };
-
       document.getElementById("volume").oninput = (e) => {
         audio.volume = e.target.value;
       };
@@ -312,7 +317,7 @@ function renderSongs(filter=""){
 function setActive(div, song){
   document.querySelectorAll(".song").forEach(s => s.classList.remove("active"));
   div.classList.add("active");
-  activeSong.textContent = `Reproduciendo: ${song}`;
+  activeSong.textContent = `🎵 Reproduciendo: ${song}`;
 }
 
 function clearActive(){
@@ -330,6 +335,12 @@ document.getElementById("stopAll").onclick = () => {
     a.currentTime = 0;
   });
   clearActive();
+};
+
+document.getElementById("loopAll").onclick = () => {
+  loopMode = !loopMode;
+  document.getElementById("loopAll").textContent = `LOOP GENERAL: ${loopMode ? "ON" : "OFF"}`;
+  document.querySelectorAll("audio").forEach(a => a.loop = loopMode);
 };
 
 renderSongs();
