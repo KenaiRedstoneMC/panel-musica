@@ -1,145 +1,123 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>🎪 Panel Música Circo AC</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="manifest.json">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Panel de Música</title>
 <style>
   body {
-    background: #050505;
-    color: #fff;
+    background: #0b0c10;
+    color: #e5e5e5;
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 40px auto;
     padding: 20px;
+    background: rgba(20, 20, 20, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.7);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* LED MULTICOLOR */
+  .container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 3px;
+    background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff, #ff00ff, #00ffff, #ffff00);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    animation: ledGlow 3.5s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes ledGlow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
   }
 
   h1 {
     text-align: center;
+    font-size: 2rem;
     margin-bottom: 10px;
-    font-size: 28px;
-  }
-
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .top-bar input {
-    flex: 1;
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid #333;
-    background: #111;
-    color: #fff;
-  }
-
-  .top-bar button {
-    padding: 12px 16px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    background: #1e1e1e;
-    color: #fff;
-    font-weight: bold;
-  }
-
-  .top-bar button:hover {
-    background: #333;
   }
 
   .controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    gap: 10px;
-    flex-wrap: wrap;
+    margin-bottom: 20px;
   }
 
-  .loop-btn, .stop-all-btn {
-    background: #1e1e1e;
-    border: 1px solid #444;
-    padding: 10px 14px;
+  .controls input[type="text"] {
+    width: 60%;
+    padding: 10px;
     border-radius: 10px;
-    cursor: pointer;
-    color: #fff;
+    border: none;
+    outline: none;
   }
 
-  .loop-btn.active {
-    background: #00ff7f;
-    color: #000;
-    border-color: #00ff7f;
-  }
-
-  .track {
-    background: #111;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .track.active {
-    background: #00ff7f;
-    color: #000;
-  }
-
-  .track-name {
-    flex: 1;
-    padding-right: 10px;
-    font-size: 16px;
-  }
-
-  button.play-btn, button.stop-btn {
-    font-size: 16px;
-    padding: 8px 12px;
+  .controls button {
+    padding: 10px 20px;
     border-radius: 10px;
     border: none;
     cursor: pointer;
-    background: #1e1e1e;
+    background: #1f1f1f;
     color: #fff;
-    margin-left: 6px;
+    font-weight: bold;
   }
 
-  button.play-btn:hover, button.stop-btn:hover {
-    background: #333;
+  .controls button:hover {
+    background: #2e2e2e;
   }
 
-  .audio-player {
+  .song-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+  }
+
+  .song-item {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  }
+
+  .song-item h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .song-item button {
     width: 100%;
-    margin-top: 10px;
-    background: #111;
-    border-radius: 12px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: #1f1f1f;
+    color: #fff;
+    font-weight: bold;
   }
 
-  /* EFECTOS LED */
-  .led {
-    position: absolute;
-    width: 100%;
-    height: 6px;
-    top: 0;
-    left: 0;
-    background: linear-gradient(90deg, transparent, #00ff7f, transparent);
-    animation: led 2s infinite;
-  }
-
-  @keyframes led {
-    0% { transform: translateX(-100%); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateX(100%); opacity: 0; }
+  .song-item button:hover {
+    background: #2e2e2e;
   }
 
   .volume {
@@ -149,173 +127,172 @@
   }
 
   .volume input {
-    width: 160px;
+    width: 150px;
+  }
+
+  audio {
+    width: 100%;
+    margin-top: 10px;
   }
 </style>
 </head>
-
 <body>
-<div class="container">
-  <h1>🎪 Panel Música Circo AC</h1>
 
-  <div class="top-bar">
-    <input id="search" placeholder="Buscar canción...">
-    <button id="stopAll" class="stop-all-btn">STOP GENERAL</button>
-  </div>
+<div class="container">
+  <h1>Panel de Música</h1>
 
   <div class="controls">
-    <div>
-      Repetir canción:
-      <button id="loopBtn" class="loop-btn">OFF</button>
-    </div>
-
+    <input type="text" id="search" placeholder="Buscar música..." />
     <div class="volume">
-      Volumen:
-      <input id="vol" type="range" min="0" max="100" value="100">
+      <label for="volume">Volumen</label>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
     </div>
+    <button id="stopAll">Stop general</button>
   </div>
 
-  <div id="tracks"></div>
-
-  <audio id="player" controls class="audio-player"></audio>
+  <ul class="song-list" id="songList"></ul>
 </div>
 
 <script>
-const player = document.getElementById("player");
-const tracksContainer = document.getElementById("tracks");
-const loopBtn = document.getElementById("loopBtn");
-const stopAll = document.getElementById("stopAll");
-const search = document.getElementById("search");
-const vol = document.getElementById("vol");
-
-player.volume = 1;
-
-let loopOn = false;
-loopBtn.addEventListener("click", () => {
-  loopOn = !loopOn;
-  player.loop = loopOn;
-  loopBtn.textContent = loopOn ? "ON" : "OFF";
-  loopBtn.classList.toggle("active", loopOn);
-});
-
-vol.addEventListener("input", () => {
-  player.volume = vol.value / 100;
-});
-
-stopAll.addEventListener("click", () => {
-  player.pause();
-  player.currentTime = 0;
-  document.querySelectorAll(".track").forEach(t => t.classList.remove("active"));
-});
-
-// Lista de canciones (ordenada alfabéticamente)
-const tracks = [
-  {name:"APT", file:"APT. - Sped up Nightcore.mp3"},
-  {name:"Ay Mama", file:"Chayanne_-_Ay_Mama.mp3"},
-  {name:"Bailes Burgaleses (Puy du Fou)", file:"Bailes Burgaleses (feat. Guilhem Desq) - extrait du spectacle _El Último Cantar_ - Puy du Fou España.mp3"},
-  {name:"Bella Donna Twist", file:"Bella Donna Twist [1TgyohHqYPs].mp3"},
-  {name:"Bling Bang Born", file:"Bling-Bang-Bang-Born.mp3"},
-  {name:"Cars 2 (Main Menu)", file:"Cars 2 ( Its Finn Mcmissile) Soundtrack [AAW2Qd9_Vt4].mp3"},
-  {name:"Charleston", file:"Charleston del Siglo de Plata (feat. Richard Harvey).mp3"},
-  {name:"Clouds", file:"Clouds_FYsnaLesV3o.mp3"},
-  {name:"Dai Allegri Musicanti", file:"Dai Allegri Musicanti [B3PS5n-nVuc].mp3"},
-  {name:"Enchantress", file:"Two_Steps_From_Hell_-_Enchantress.mp3"},
-  {name:"Epic Emotional", file:"epic-emotional_long-197089.mp3"},
-  {name:"Espresso Macchiato", file:"TOMMY CASH - ESPRESSO MACCHIATO.mp3"},
-  {name:"Gran Final", file:"musica-de-circo-gran-final-128-ytshorts.savetube.me.mp3"},
-  {name:"Gurenge Lisa", file:"gurenge-lisa.mp3"},
-  {name:"Ilargi Berriak", file:"Ilargi Berriak.mp3"},
-  {name:"Intocables", file:"blocks-intocables.mp3"},
-  {name:"Knife Party - LRAD", file:"Knife_Party_-_LRAD_Original_Mix.mp3"},
-  {name:"Kurios", file:"NEW__KURIOS_Music__Lyrics_-_Sing_Along_with_us_____Steampunk_Telegram____Cirque_du_Soleil_DoZ293Y1jzo.mp3"},
-  {name:"La Invasión", file:"La Invasión (feat. Pedro Eustache & London Voices).mp3"},
-  {name:"Las Águilas", file:"Las Águilas - La Música del Espectáculo _Puy du Fou - España_.mp3"},
-  {name:"Lava Chicken", file:"Minecraft 1.21.7 New Music Disc _Lava Chicken_ [ChEkbiBzILc].mp3"},
-  {name:"Los Gavilanes", file:"Los Gavilanes - extrait du spectacle _Cetrería de Reyes_ - Puy du Fou España.mp3"},
-  {name:"Los Halcones", file:"Los Halcones - La Música del Espectáculo _Puy du Fou - España_.mp3"},
-  {name:"Luminary", file:"Luminary.mp3"},
-  {name:"Mahalageasca", file:"Mahalageasca - Bucovina Dub.mp3"},
-  {name:"Malagueña", file:"Malaguena.mp3"},
-  {name:"Marimba no. 7", file:"Marimba no. 7 - Luzia-yt.savetube.me.mp3"},
-  {name:"Most Epic Ever", file:"Most_Epic_Music_Ever___The_Wolf_And_The_Moon__BrunuhVille.mp3"},
-  {name:"Musica Circo Chile 2019", file:"musica-de-circo-chile-2019-128-ytshorts.savetube.me.mp3"},
-  {name:"Musica Malabares (ingles)", file:"MusicaMalabares.mp3"},
-  {name:"Musica Malabares", file:"Música-para-malabares-_-Circo-_ff8nEfOyzr4_-RECORTADO-A-MEJOR-‐-Hecho-con-Clipchamp.mp3"},
-  {name:"Musica epica sin copyright", file:"musica-epica-sin-copyright-gratis-7-128-ytshorts.savetube.me.mp3"},
-  {name:"My Beauty", file:"My_Beauty.mp3"},
-  {name:"Nails Hair Hips Heels", file:"Nails_Hair_Hips_Heels_Remix.mp3"},
-  {name:"Party Rockin", file:"Party Rockin.mp3"},
-  {name:"Rafaga - Mentirosa", file:"Rafaga-Mentirosa.mp3"},
-  {name:"Resist and Express", file:"Resist and Express.mp3"},
-  {name:"SI POR MI FUERA", file:"SI-POR-MI-FUERA-‐-Hecho-con-Clipchamp.mp3"},
-  {name:"Skylanders SuperChargers", file:"[♪♫] Main Theme (Main Menu) _ Skylanders SuperChargers Music [FV1QbTT5hy8].mp3"},
-  {name:"Stal Experience", file:"stal-experience_vadim_lisikov.mp3"},
-  {name:"Stomps Sonic", file:"stomps-sonic-stomps-232226.mp3"},
-  {name:"Supernova Dance Cover", file:"aespa - supernova dance cover by rubén holgado.mp3"},
-  {name:"Superstar", file:"Superstar I [6nSTUK75Prg].mp3"},
-  {name:"Tuchat Quevedo", file:"TUCHAT - Quevedo (Official Video).mp3"},
-  {name:"The Trooper", file:"Iron_Maiden_-_The_Trooper_1998_Remastered_Version_1998_Remastered_Version_(FeelMP3.com).mp3"},
-  {name:"The Top 40 Jugglers of 2023", file:"The Top 40 Jugglers of 2023.mp3"},
-  {name:"Thunderstruck", file:"thunderstruck-128-ytshorts.savetube.me.mp3"},
-  {name:"Two Steps From Hell - Enchantress", file:"Two_Steps_From_Hell_-_Enchantress.mp3"},
-  {name:"You Me", file:"You__Me_320.mp3"},
-  {name:"You Must Be Joking", file:"You_Must_Be_Joking.mp3"}
+const songs = [
+  "1_2_3.mp3",
+  "APT. - Sped up Nightcore.mp3",
+  "Alexandra Stan - Mr. Saxobeat Official Video (online-audio-converter.com).mp3",
+  "Avatar_ Main Theme (Epic Version).mp3",
+  "Bachelor on the move.mp3",
+  "Bailes Burgaleses (feat. Guilhem Desq) - extrait du spectacle _El Último Cantar_ - Puy du Fou España.mp3",
+  "Bella Donna Twist [1TgyohHqYPs].mp3",
+  "Bling-Bang-Bang-Born.mp3",
+  "Cars 2 ( Its Finn Mcmissile) Soundtrack [AAW2Qd9_Vt4].mp3",
+  "Charleston del Siglo de Plata (feat. Richard Harvey).mp3",
+  "Chayanne_-_Ay_Mama.mp3",
+  "Cirque du Soleil - Irna.mp3",
+  "Clouds_FYsnaLesV3o.mp3",
+  "Dai Allegri Musicanti [B3PS5n-nVuc].mp3",
+  "Fiesta Finale.mp3",
+  "Ilargi Berriak.mp3",
+  "Iron_Maiden_-_The_Trooper_1998_Remastered_Version_1998_Remastered_Version_(FeelMP3.com).mp3",
+  "Knife_Party_-_LRAD_Original_Mix.mp3",
+  "La Invasión (feat. Pedro Eustache & London Voices).mp3",
+  "Las Águilas - La Música del Espectáculo _Puy du Fou - España_.mp3",
+  "Like Kids.mp3",
+  "Lindsey Stirling + Alexander Jean - Stampede (Official Video).mp3",
+  "Lindsey Stirling- Master Of Tides.mp3",
+  "Los Gavilanes - extrait du spectacle _Cetrería de Reyes_ - Puy du Fou España.mp3",
+  "Los Halcones - La Música del Espectáculo _Puy du Fou - España_.mp3",
+  "Luminary.mp3",
+  "MUSICA_EPICA-_two_steps_from_hell-_strenght_of_a_thousand_men_KLICKAUD.mp3",
+  "Mahalageasca - Bucovina Dub.mp3",
+  "Malaguena.mp3",
+  "Marimba no. 7 - Luzia-yt.savetube.me.mp3",
+  "Minecraft 1.21.7 New Music Disc _Lava Chicken_ [ChEkbiBzILc].mp3",
+  "Most_Epic_Music_Ever___The_Wolf_And_The_Moon__BrunuhVille.mp3",
+  "MusicaMalabares.mp3",
+  "My_Beauty.mp3",
+  "Música-para-malabares-_-Circo-_ff8nEfOyzr4_-RECORTADO-A-MEJOR-‐-Hecho-con-Clipchamp.mp3",
+  "NEW__KURIOS_Music__Lyrics_-_Sing_Along_with_us_____Steampunk_Telegram____Cirque_du_Soleil_DoZ293Y1jzo.mp3",
+  "Nails_Hair_Hips_Heels_Remix.mp3",
+  "Party Rockin.mp3",
+  "Rafaga-Mentirosa.mp3",
+  "Resist and Express.mp3",
+  "SI-POR-MI-FUERA-‐-Hecho-con-Clipchamp.mp3",
+  "Set_Encontro_Semanal_De_Malabares_E_Circo_RJ_no1_XX.mp3",
+  "SpotifyMate.com - B.B.F - KIRA.mp3",
+  "Superstar I [6nSTUK75Prg].mp3",
+  "TOMMY CASH - ESPRESSO MACCHIATO.mp3",
+  "TUCHAT - Quevedo (Official Video).mp3",
+  "The Top 40 Jugglers of 2023.mp3",
+  "Two Steps From Hell - Impossible (feat. Merethe Soltvedt).mp3",
+  "Two_Steps_From_Hell_-_Enchantress.mp3",
+  "Two_Steps_From_Hell_-_SkyWorld_-_For_the_Win_KLICKAUD.mp3",
+  "You_Must_Be_Joking.mp3",
+  "You__Me_320.mp3",
+  "[♪♫] Main Theme (Main Menu) _ Skylanders SuperChargers Music [FV1QbTT5hy8].mp3",
+  "barefoot-adventures-128-ytshorts.savetube.me.mp3",
+  "blocks-intocables.mp3",
+  "el mambo.mp3",
+  "epic-emotional_long-197089.mp3",
+  "gurenge-lisa.mp3",
+  "musica-de-circo-chile-2019-128-ytshorts.savetube.me.mp3",
+  "musica-de-circo-gran-final-128-ytshorts.savetube.me.mp3",
+  "musica-epica-sin-copyright-gratis-7-128-ytshorts.savetube.me.mp3",
+  "musica-malabares1-‐-Hecho-con-Clipchamp.mp3",
+  "stal-experience_vadim_lisikov.mp3",
+  "star-wars-cantina.mp3",
+  "stomps-sonic-stomps-232226.mp3",
+  "thunderstruck-128-ytshorts.savetube.me.mp3",
+  "ummet-ozcan-xanadu-mongolian-techno-128-ytshorts.savetube.me.mp3"
 ];
 
-// Crea lista de canciones
-function safePath(file) {
-  return "music/" + encodeURIComponent(file).replace(/%2F/g, "/");
+// Quitar supernova
+const filteredSongs = songs.filter(song => !song.toLowerCase().includes("supernova"));
+
+// Ordenar alfabéticamente
+filteredSongs.sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }));
+
+const songList = document.getElementById("songList");
+const search = document.getElementById("search");
+const stopAllBtn = document.getElementById("stopAll");
+const volume = document.getElementById("volume");
+
+let audios = [];
+
+function createSongItem(songName) {
+  const li = document.createElement("li");
+  li.className = "song-item";
+
+  const title = document.createElement("h3");
+  title.textContent = songName;
+
+  const audio = document.createElement("audio");
+  audio.src = "music/" + songName;
+  audio.loop = false;
+
+  const playBtn = document.createElement("button");
+  playBtn.textContent = "Play";
+  playBtn.onclick = () => {
+    stopAll();
+    audio.play();
+  };
+
+  const stopBtn = document.createElement("button");
+  stopBtn.textContent = "Stop";
+  stopBtn.onclick = () => audio.pause();
+
+  li.appendChild(title);
+  li.appendChild(playBtn);
+  li.appendChild(stopBtn);
+  li.appendChild(audio);
+
+  audios.push(audio);
+  return li;
 }
 
-function createTracks(list) {
-  tracksContainer.innerHTML = "";
-  list.forEach(track => {
-    const div = document.createElement("div");
-    div.className = "track";
+function renderList(list) {
+  songList.innerHTML = "";
+  list.forEach(song => songList.appendChild(createSongItem(song)));
+}
 
-    const led = document.createElement("div");
-    led.className = "led";
-    div.appendChild(led);
-
-    const name = document.createElement("span");
-    name.className = "track-name";
-    name.textContent = track.name;
-
-    const playBtn = document.createElement("button");
-    playBtn.className = "play-btn";
-    playBtn.textContent = "▶";
-    playBtn.onclick = () => {
-      document.querySelectorAll(".track").forEach(t => t.classList.remove("active"));
-      div.classList.add("active");
-      player.src = safePath(track.file);
-      player.play();
-    };
-
-    const stopBtn = document.createElement("button");
-    stopBtn.className = "stop-btn";
-    stopBtn.textContent = "⏹";
-    stopBtn.onclick = () => {
-      player.pause();
-      player.currentTime = 0;
-      div.classList.remove("active");
-    };
-
-    div.appendChild(name);
-    div.appendChild(playBtn);
-    div.appendChild(stopBtn);
-
-    tracksContainer.appendChild(div);
+function stopAll() {
+  audios.forEach(a => {
+    a.pause();
+    a.currentTime = 0;
   });
 }
 
-createTracks(tracks);
-
-// Buscador
 search.addEventListener("input", () => {
-  const query = search.value.toLowerCase();
-  const filtered = tracks.filter(t => t.name.toLowerCase().includes(query));
-  createTracks(filtered);
+  const term = search.value.toLowerCase();
+  const filtered = filteredSongs.filter(song => song.toLowerCase().includes(term));
+  renderList(filtered);
 });
+
+volume.addEventListener("input", () => {
+  audios.forEach(a => (a.volume = volume.value));
+});
+
+stopAllBtn.addEventListener("click", stopAll);
+
+renderList(filteredSongs);
 </script>
 </body>
 </html>
