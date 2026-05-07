@@ -14,6 +14,16 @@ body{
   padding:0;
 }
 
+html, body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* FIX iOS zoom */
+input, textarea, select {
+  font-size: 16px;
+}
+
 .container{
   max-width:1100px;
   margin:auto;
@@ -171,19 +181,97 @@ h1{text-align:center;margin-bottom:20px}
 
 <script>
 const songs = [
-  "Proud Nation EPIC.mp3",
-  "1_2_3.mp3",
-  "APT. - Sped up Nightcore.mp3",
-  "Avatar_ Main Theme (Epic Version).mp3",
-  "Crazy Frog.mp3",
-  "CrabRave.mp3",
-  "PokerFace.mp3",
-  "MurderInMyMind.mp3"
+"Proud Nation EPIC.mp3",
+"1_2_3.mp3",
+"APT. - Sped up Nightcore.mp3",
+"Alexandra Stan - Mr. Saxobeat Official Video (online-audio-converter.com).mp3",
+"Avatar_ Main Theme (Epic Version).mp3",
+"Bachelor on the move.mp3",
+"Bailes Burgaleses (feat. Guilhem Desq) - extrait du spectacle _El Último Cantar_ - Puy du Fou España.mp3",
+"Bella Donna Twist [1TgyohHqYPs].mp3",
+"Bling-Bang-Bang-Born.mp3",
+"Cars 2 ( Its Finn Mcmissile) Soundtrack [AAW2Qd9_Vt4].mp3",
+"Charleston del Siglo de Plata (feat. Richard Harvey).mp3",
+"Chayanne_-_Ay_Mama.mp3",
+"Cirque du Soleil - Irna.mp3",
+"Clouds_FYsnaLesV3o.mp3",
+"Dai Allegri Musicanti [B3PS5n-nVuc].mp3",
+"Fiesta Finale.mp3",
+"Ilargi Berriak.mp3",
+"Iron_Maiden_-_The_Trooper_1998_Remastered_Version_1998_Remastered_Version_(FeelMP3.com).mp3",
+"Knife_Party_-_LRAD_Original_Mix.mp3",
+"La Invasión (feat. Pedro Eustache & London Voices).mp3",
+"Las Águilas - La Música del Espectáculo _Puy du Fou - España_.mp3",
+"Like Kids.mp3",
+"Lindsey Stirling + Alexander Jean - Stampede (Official Video).mp3",
+"Lindsey Stirling- Master Of Tides.mp3",
+"Los Gavilanes - extrait du spectacle _Cetrería de Reyes_ - Puy du Fou España.mp3",
+"Los Halcones - La Música del Espectáculo _Puy du Fou - España_.mp3",
+"Luminary.mp3",
+"MUSICA_EPICA-_two_steps_from_hell-_strenght_of_a_thousand_men_KLICKAUD.mp3",
+"Mahalageasca - Bucovina Dub.mp3",
+"Malaguena.mp3",
+"Marimba no. 7 - Luzia-yt.savetube.me.mp3",
+"Minecraft 1.21.7 New Music Disc _Lava Chicken_ [ChEkbiBzILc].mp3",
+"Most_Epic_Music_Ever___The_Wolf_And_The_Moon__BrunuhVille.mp3",
+"My_Beauty.mp3",
+"Música-para-malabares-_-Circo-_ff8nEfOyzr4_-RECORTADO-A-MEJOR-‐-Hecho-con-Clipchamp.mp3",
+"NEW__KURIOS_Music__Lyrics_-_Sing_Along_with_us_____Steampunk_Telegram____Cirque_du_Soleil_DoZ293Y1jzo.mp3",
+"Nails_Hair_Hips_Heels_Remix.mp3",
+"Party Rockin.mp3",
+"Rafaga-Mentirosa.mp3",
+"Resist and Express.mp3",
+"SI-POR-MI-FUERA-‐-Hecho-con-Clipchamp.mp3",
+"Set_Encontro_Semanal_De_Malabares_E_Circo_RJ_no1_XX.mp3",
+"SpotifyMate.com - B.B.F - KIRA.mp3",
+"Superstar I [6nSTUK75Prg].mp3",
+"TOMMY CASH - ESPRESSO MACCHIATO.mp3",
+"TUCHAT - Quevedo (Official Video).mp3",
+"The Top 40 Jugglers of 2023.mp3",
+"Two Steps From Hell - Impossible (feat. Merethe Soltvedt).mp3",
+"Two_Steps_From_Hell_-_Enchantress.mp3",
+"Two_Steps_From_Hell_-_SkyWorld_-_For_the_Win_KLICKAUD.mp3",
+"You_Must_Be_Joking.mp3",
+"You__Me_320.mp3",
+"[♪♫] Main Theme (Main Menu) _ Skylanders SuperChargers Music [FV1QbTT5hy8].mp3",
+"barefoot-adventures-128-ytshorts.savetube.me.mp3",
+"blocks-intocables.mp3",
+"el mambo.mp3",
+"epic-emotional_long-197089.mp3",
+"gurenge-lisa.mp3",
+"musica-de-circo-chile-2019-128-ytshorts.savetube.me.mp3",
+"musica-de-circo-gran-final-128-ytshorts.savetube.me.mp3",
+"musica-epica-sin-copyright-gratis-7-128-ytshorts.savetube.me.mp3",
+"musica-malabares1-‐-Hecho-con-Clipchamp.mp3",
+"stal-experience_vadim_lisikov.mp3",
+"star-wars-cantina.mp3",
+"stomps-sonic-stomps-232226.mp3",
+"thunderstruck-128-ytshorts.savetube.me.mp3",
+"ummet-ozcan-xanadu-mongolian-techno-128-ytshorts.savetube.me.mp3",
+"musica-mazas-malabares_1.mp3",
+"circo-ruso.mp3",
+"trapecio-musica.mp3",
+"Crazy Frog.mp3",
+"PreludeAndAction.mp3",
+"PartyRock.mp3",
+"SpanishFlame.mp3",
+"ShadowWarrior.mp3",
+"Adiemus.mp3",
+"Esperanza.mp3",
+"Diabolo.mp3",
+"Conquistador.mp3",
+"Legendary.mp3",
+"TheWellerman.mp3",
+"CrabRave.mp3",
+"WatUNoWen.mp3",
+"PokerFace.mp3",
+"Dardos.mp3",
+"ThankYouNotSoBad.mp3",
+"MurderInMyMind.mp3"
 ];
 
 songs.sort();
 
-// 🔥 FIX GLOBAL
 let currentAudio = null;
 let loopMode = false;
 let audioList = [];
@@ -202,7 +290,7 @@ function formatTime(sec){
 
 function renderSongs(filter=""){
   musicList.innerHTML = "";
-  audioList = []; // 🔥 limpiar lista
+  audioList = [];
 
   songs
   .filter(s => s.toLowerCase().includes(filter.toLowerCase()))
@@ -228,7 +316,7 @@ function renderSongs(filter=""){
     const time = document.createElement("div");
     time.textContent = "0:00 / 0:00";
 
-    div.append(h, play, stop, bar, time);
+    div.append(h,play,stop,bar,time);
     musicList.appendChild(div);
 
     const audio = new Audio(`music/${song}`);
@@ -247,7 +335,7 @@ function renderSongs(filter=""){
       audio.loop = loopMode;
       audio.play();
 
-      setActive(div, song);
+      setActive(div,song);
 
       audio.ontimeupdate = () => {
         bar.value = (audio.currentTime / audio.duration) * 100 || 0;
@@ -264,7 +352,7 @@ function renderSongs(filter=""){
 
     bar.oninput = () => {
       if(audio.duration)
-        audio.currentTime = (bar.value / 100) * audio.duration;
+        audio.currentTime = (bar.value/100)*audio.duration;
     };
 
     volume.oninput = e => {
@@ -273,7 +361,7 @@ function renderSongs(filter=""){
   });
 }
 
-function setActive(div, song){
+function setActive(div,song){
   document.querySelectorAll(".song").forEach(s => s.classList.remove("active"));
   div.classList.add("active");
   activeSong.textContent = `🎵 Reproduciendo: ${song}`;
@@ -284,17 +372,13 @@ function clearActive(){
   activeSong.textContent = "Ninguna canción seleccionada";
 }
 
-// 🔥 SEARCH FIX
 search.oninput = e => renderSongs(e.target.value);
 
-// 🔥 LOOP GLOBAL FIX
 loopAll.onclick = () => {
   loopMode = !loopMode;
   loopAll.textContent = `LOOP GENERAL: ${loopMode ? "ON" : "OFF"}`;
 
-  audioList.forEach(a => {
-    a.loop = loopMode;
-  });
+  audioList.forEach(a => a.loop = loopMode);
 };
 
 renderSongs();
