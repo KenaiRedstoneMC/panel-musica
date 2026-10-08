@@ -440,13 +440,13 @@ let cancionesNuevas = [
   { archivo: "King Of Swing (Album Version).mp3", titulo: "King Of Swing (Album Version)" },
   { archivo: "Mambo Swing (Album Version).mp3", titulo: "Mambo Swing (Album Version)" },
   { archivo: "Mr. Pinstripe Suit.mp3", titulo: "Mr. Pinstripe Suit" },
-  { archivo: "Música de Circo - Malabares/Juggler.mp3", titulo: "Música de Circo - Malabares/Juggler" },
+  { archivo: "Música de Circo - Malabares⧸Juggler.mp3", titulo: "Música de Circo - Malabares/Juggler" },
   { archivo: "Musica De Circo MALABARES.mp3", titulo: "Musica De Circo MALABARES" },
-  { archivo: "Música para malabares / Circo.mp3", titulo: "Música para malabares / Circo" },
+  { archivo: "Música para malabares ⧸ Circo.mp3", titulo: "Música para malabares / Circo" },
   { archivo: "Victory 10.mp3", titulo: "Victory 10" },
-  { archivo: "Yakety Sax- Music.mp3", titulo: "Yakety Sax- Music" },
+  { archivo: "-Yakety Sax- Music.mp3", titulo: "-Yakety Sax- Music" },
   { archivo: "You & Me.mp3", titulo: "You & Me" },
-  { archivo: "メカリアレンジ Moon Over The Castle.mp3", titulo: "メカリアレンジ Moon Over The Castle" },
+  { archivo: "【メタルアレンジ】Moon　Over　The　Castle.mp3", titulo: "【メタルアレンジ】Moon Over The Castle" },
   { archivo: "Dapper's Groove.mp3", titulo: "Dapper's Groove" },
   { archivo: "Day & Night.mp3", titulo: "Day & Night" },
   { archivo: "El Conquistador.mp3", titulo: "El Conquistador" },
@@ -461,11 +461,11 @@ let cancionesNuevas = [
   { archivo: "Spanish Flame.mp3", titulo: "Spanish Flame" },
   { archivo: "Spicy Sound.mp3", titulo: "Spicy Sound" },
   { archivo: "Take the Night.mp3", titulo: "Take the Night" },
-  { archivo: "What's Next ? (Album Version).mp3", titulo: "What's Next ? (Album Version)" },
-  { archivo: "とれおすBACANO!—OP.mp3", titulo: "とれおすBACANO!—OP" },
+  { archivo: "What's Next？ (Album Version).mp3", titulo: "What's Next? (Album Version)" },
+  { archivo: "とりあえずBACCANO!ーＯＰ.mp3", titulo: "とりあえずBACCANO!ーＯＰ" },
   { archivo: "Esperanza.mp3", titulo: "Esperanza" },
   { archivo: "The Arena.mp3", titulo: "The Arena" },
-  { archivo: "Bob Bradley, Nick McEnaly, Josh Weller - Disarm (Real Racing 3 Trailer).mp3", titulo: "Bob Bradley, Nick McEnaly, Josh Weller - Disarm (Real Racing 3 Trailer)" },
+  { archivo: "Bob Bradley, Nick McEnally, Josh Weller - Disarm (Real Racing 3 Trailer).mp3", titulo: "Bob Bradley, Nick McEnally, Josh Weller - Disarm (Real Racing 3 Trailer)" },
   { archivo: "Flying.mp3", titulo: "Flying" },
   { archivo: "Great Spirit (Extended Mix).mp3", titulo: "Great Spirit (Extended Mix)" },
   { archivo: "Indigène.mp3", titulo: "Indigène" },
@@ -635,8 +635,11 @@ function renderSongs(filter = "") {
       };
 
       audio.onerror = () => {
-        time.textContent = "No se pudo cargar el archivo de music/";
-      };
+      time.textContent = "No se pudo cargar: " + cancion.archivo;
+      activeSongNueva.textContent =
+        "No se pudo cargar " + cancion.archivo +
+        ". Comprueba que ese nombre existe exactamente en music/ de GitHub.";
+    };
 
       bar.oninput = () => {
         if (audio.duration) {
@@ -772,7 +775,10 @@ function renderNuevaMusica(filter = "") {
     };
 
     audio.onerror = () => {
-      time.textContent = "No se pudo cargar el archivo de music/";
+      time.textContent = "No se encuentra en music/: " + cancion.archivo;
+      activeSongNueva.textContent =
+        "No se pudo cargar: " + cancion.archivo +
+        " — revisa que el MP3 esté subido a music/ y que el nombre coincida exactamente.";
     };
 
     bar.oninput = () => {
