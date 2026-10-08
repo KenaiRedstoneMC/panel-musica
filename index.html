@@ -222,12 +222,12 @@ h1 { text-align: center; margin-bottom: 22px; }
 <h1>🎵 Panel de Música</h1>
 
 <div class="tabs">
-  <button class="tab active" id="tabBtnActual"
+  <button class="tab" id="tabBtnActual"
           onclick="showTab('actual')">
     🎶 Música actual
   </button>
 
-  <button class="tab" id="tabBtnNueva"
+  <button class="tab active" id="tabBtnNueva"
           onclick="showTab('nueva')">
     🎵 Nueva música
   </button>
@@ -242,7 +242,7 @@ h1 { text-align: center; margin-bottom: 22px; }
 </div>
 
 <!-- PESTAÑA DE MÚSICA ACTUAL -->
-<section id="tabActual">
+<section id="tabActual" hidden>
 
   <div class="search">
     <input id="search" placeholder="Buscar canción...">
@@ -260,7 +260,7 @@ h1 { text-align: center; margin-bottom: 22px; }
 </section>
 
 <!-- PESTAÑA DE NUEVA MÚSICA DESDE GITHUB -->
-<section id="tabNueva" hidden>
+<section id="tabNueva">
 
   <h2>🎵 Nueva música</h2>
 
@@ -281,7 +281,7 @@ h1 { text-align: center; margin-bottom: 22px; }
   </div>
 
   <div id="estadoNueva" class="message">
-    Lista independiente de canciones nuevas.
+    🎵 Música nueva: lista principal.
   </div>
 
   <div class="music-list" id="musicListNueva"></div>
@@ -435,11 +435,42 @@ let loopNueva = false;
 let audioList = [];
 let audioListNueva = [];
 let cancionesNuevas = [
-  // EJEMPLOS: cambia estos nombres por los de tus archivos MP3.
-  // Los archivos deben estar dentro de la carpeta music/.
-  { archivo: "CancionNueva1.mp3", titulo: "Canción nueva 1" },
-  { archivo: "CancionNueva2.mp3", titulo: "Canción nueva 2" },
-  { archivo: "CancionNueva3.mp3", titulo: "Canción nueva 3" }
+  { archivo: "Cotton Eye Joe - Rednex (Lyrics).mp3", titulo: "Cotton Eye Joe - Rednex (Lyrics)" },
+  { archivo: "Jumpin' Jack (Album Version).mp3", titulo: "Jumpin' Jack (Album Version)" },
+  { archivo: "King Of Swing (Album Version).mp3", titulo: "King Of Swing (Album Version)" },
+  { archivo: "Mambo Swing (Album Version).mp3", titulo: "Mambo Swing (Album Version)" },
+  { archivo: "Mr. Pinstripe Suit.mp3", titulo: "Mr. Pinstripe Suit" },
+  { archivo: "Música de Circo - Malabares/Juggler.mp3", titulo: "Música de Circo - Malabares/Juggler" },
+  { archivo: "Musica De Circo MALABARES.mp3", titulo: "Musica De Circo MALABARES" },
+  { archivo: "Música para malabares / Circo.mp3", titulo: "Música para malabares / Circo" },
+  { archivo: "Victory 10.mp3", titulo: "Victory 10" },
+  { archivo: "Yakety Sax- Music.mp3", titulo: "Yakety Sax- Music" },
+  { archivo: "You & Me.mp3", titulo: "You & Me" },
+  { archivo: "メカリアレンジ Moon Over The Castle.mp3", titulo: "メカリアレンジ Moon Over The Castle" },
+  { archivo: "Dapper's Groove.mp3", titulo: "Dapper's Groove" },
+  { archivo: "Day & Night.mp3", titulo: "Day & Night" },
+  { archivo: "El Conquistador.mp3", titulo: "El Conquistador" },
+  { archivo: "El Mambo.mp3", titulo: "El Mambo" },
+  { archivo: "Extra Fries.mp3", titulo: "Extra Fries" },
+  { archivo: "Glitz At The Ritz.mp3", titulo: "Glitz At The Ritz" },
+  { archivo: "Hit the Road Jack.mp3", titulo: "Hit the Road Jack" },
+  { archivo: "It Means A Thing If You Swing.mp3", titulo: "It Means A Thing If You Swing" },
+  { archivo: "It's Almost Spring Back Home.mp3", titulo: "It's Almost Spring Back Home" },
+  { archivo: "Ninja.mp3", titulo: "Ninja" },
+  { archivo: "Rico's Groove.mp3", titulo: "Rico's Groove" },
+  { archivo: "Spanish Flame.mp3", titulo: "Spanish Flame" },
+  { archivo: "Spicy Sound.mp3", titulo: "Spicy Sound" },
+  { archivo: "Take the Night.mp3", titulo: "Take the Night" },
+  { archivo: "What's Next ? (Album Version).mp3", titulo: "What's Next ? (Album Version)" },
+  { archivo: "とれおすBACANO!—OP.mp3", titulo: "とれおすBACANO!—OP" },
+  { archivo: "Esperanza.mp3", titulo: "Esperanza" },
+  { archivo: "The Arena.mp3", titulo: "The Arena" },
+  { archivo: "Bob Bradley, Nick McEnaly, Josh Weller - Disarm (Real Racing 3 Trailer).mp3", titulo: "Bob Bradley, Nick McEnaly, Josh Weller - Disarm (Real Racing 3 Trailer)" },
+  { archivo: "Flying.mp3", titulo: "Flying" },
+  { archivo: "Great Spirit (Extended Mix).mp3", titulo: "Great Spirit (Extended Mix)" },
+  { archivo: "Indigène.mp3", titulo: "Indigène" },
+  { archivo: "Le retour de d'Artagnan.mp3", titulo: "Le retour de d'Artagnan" },
+  { archivo: "MEGALOVANIA.mp3", titulo: "MEGALOVANIA" }
 ];
 let nuevaMusicaCargada = false;
 let peticionNueva = 0;
@@ -780,8 +811,9 @@ volume.oninput = event => {
   });
 };
 
-/* Inicializar la lista original */
+/* Inicializar las dos listas; abrir Nueva música como inicio */
 renderSongs();
+showTab("nueva");
 </script>
 </body>
 </html>
