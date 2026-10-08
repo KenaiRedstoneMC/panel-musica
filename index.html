@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -266,10 +265,9 @@ h1 { text-align: center; margin-bottom: 22px; }
   <h2>🎵 Nueva música</h2>
 
   <p class="help">
-    Esta lista obtiene las canciones del archivo musica.json
-    alojado en tu repositorio de GitHub.
-    Para añadir canciones, sube los MP3 a la carpeta configurada
-    y actualiza musica.json.
+    Esta lista es independiente de “Música actual”, pero está
+    configurada en este mismo index.html. Sube los MP3 nuevos
+    a music/ y añade sus nombres al array cancionesNuevas del código.
   </p>
 
   <div class="search">
@@ -283,7 +281,7 @@ h1 { text-align: center; margin-bottom: 22px; }
   </div>
 
   <div id="estadoNueva" class="message">
-    Pulsa la pestaña para cargar la música de GitHub.
+    Lista independiente de canciones nuevas.
   </div>
 
   <div class="music-list" id="musicListNueva"></div>
@@ -297,20 +295,11 @@ h1 { text-align: center; margin-bottom: 22px; }
 
 <script>
 /* =====================================================
-   CONFIGURACIÓN DE GITHUB
-
-   Cambia USUARIO, REPOSITORIO y RAMA.
-   Ejemplo de rama habitual: main
-
-   Dentro de music/nueva/ deben estar:
-   - musica.json
-   - tus archivos MP3
+   MÚSICA NUEVA
+   Esta lista está en este mismo index.html.
+   Sube los MP3 nuevos a la carpeta music/ del repositorio
+   y escribe aquí sus nombres exactos.
    ===================================================== */
-
-const GITHUB_BASE =
-  "https://raw.githubusercontent.com/USUARIO/REPOSITORIO/main/music/nueva/";
-
-const JSON_URL = GITHUB_BASE + "musica.json";
 
 /* =====================================================
    LISTA ORIGINAL DE CANCIONES
@@ -445,7 +434,13 @@ let loopMode = false;
 let loopNueva = false;
 let audioList = [];
 let audioListNueva = [];
-let cancionesNuevas = [];
+let cancionesNuevas = [
+  // EJEMPLOS: cambia estos nombres por los de tus archivos MP3.
+  // Los archivos deben estar dentro de la carpeta music/.
+  { archivo: "CancionNueva1.mp3", titulo: "Canción nueva 1" },
+  { archivo: "CancionNueva2.mp3", titulo: "Canción nueva 2" },
+  { archivo: "CancionNueva3.mp3", titulo: "Canción nueva 3" }
+];
 let nuevaMusicaCargada = false;
 let peticionNueva = 0;
 
@@ -609,7 +604,7 @@ function renderSongs(filter = "") {
       };
 
       audio.onerror = () => {
-        time.textContent = "No se pudo cargar el archivo";
+        time.textContent = "No se pudo cargar el archivo de music/";
       };
 
       bar.oninput = () => {
@@ -636,72 +631,14 @@ loopAll.onclick = () => {
    musica.json debe contener una lista de nombres MP3.
    ===================================================== */
 
-function normalizarCancion(item) {
-  // Admite tanto "cancion.mp3" como objetos
-  // {"nombre":"cancion.mp3","titulo":"Mi canción"}.
-  if (typeof item === "string") {
-    return { archivo: item, titulo: item.replace(/\.mp3$/i, "") };
-  }
-
-  if (item && typeof item.archivo === "string") {
-    return {
-      archivo: item.archivo,
-      titulo: item.titulo || item.archivo.replace(/\.mp3$/i, "")
-    };
-  }
-
-  return null;
-}
-
-async function cargarNuevaMusica(forzar = false) {
-  if (nuevaMusicaCargada && !forzar) {
-    return;
-  }
-
-  const idPeticion = ++peticionNueva;
-
-  estadoNueva.textContent = "Cargando canciones desde GitHub...";
-  musicListNueva.innerHTML = "";
-
-  try {
-    const respuesta = await fetch(
-      JSON_URL + "?t=" + Date.now(),
-      { cache: "no-store" }
-    );
-
-    if (!respuesta.ok) {
-      throw new Error("HTTP " + respuesta.status);
-    }
-
-    const datos = await respuesta.json();
-
-    if (!Array.isArray(datos)) {
-      throw new Error("musica.json debe contener una lista");
-    }
-
-    if (idPeticion !== peticionNueva) return;
-
-    cancionesNuevas = datos
-      .map(normalizarCancion)
-      .filter(c => c && c.archivo && !c.archivo.includes(".."))
-      .sort((a, b) => a.titulo.localeCompare(b.titulo, "es"));
-
-    nuevaMusicaCargada = true;
-    renderNuevaMusica(searchNueva.value);
-
-    estadoNueva.textContent = cancionesNuevas.length
-      ? `${cancionesNuevas.length} canciones cargadas desde GitHub.`
-      : "El archivo musica.json no contiene canciones.";
-  } catch (error) {
-    if (idPeticion !== peticionNueva) return;
-
-    nuevaMusicaCargada = false;
-    estadoNueva.textContent =
-      "No se pudo cargar la lista. Comprueba la URL de GitHub, " +
-      "la ruta music/nueva/musica.json y que el repositorio sea público.";
-
-    musicListNueva.innerHTML = "";
-  }
+function cargarNuevaMusica(forzar = false) {
+  // La lista nueva está escrita en este mismo index.html.
+  // No necesita musica.json ni una carpeta nueva.
+  nuevaMusicaCargada = true;
+  estadoNueva.textContent = cancionesNuevas.length
+    ? `${cancionesNuevas.length} canciones en la lista de nueva música.`
+    : "Añade canciones en el array cancionesNuevas del código.";
+  renderNuevaMusica(searchNueva.value);
 }
 
 function renderNuevaMusica(filter = "") {
@@ -743,7 +680,7 @@ function renderNuevaMusica(filter = "") {
     time.textContent = "0:00 / 0:00";
 
     const audio = new Audio(
-      GITHUB_BASE + cancion.archivo.split("/").map(encodeURIComponent).join("/")
+      "music/" + cancion.archivo.split("/").map(encodeURIComponent).join("/")
     );
 
     audio.preload = "none";
@@ -772,7 +709,7 @@ function renderNuevaMusica(filter = "") {
           "🎵 Reproduciendo: " + cancion.titulo;
       } catch (error) {
         activeSongNueva.textContent =
-          "No se pudo reproducir. Comprueba que el MP3 existe en GitHub.";
+          "No se pudo reproducir. Comprueba que el MP3 existe en la carpeta music/.";
       }
     };
 
@@ -804,7 +741,7 @@ function renderNuevaMusica(filter = "") {
     };
 
     audio.onerror = () => {
-      time.textContent = "No se pudo cargar el archivo";
+      time.textContent = "No se pudo cargar el archivo de music/";
     };
 
     bar.oninput = () => {
@@ -848,54 +785,3 @@ renderSongs();
 </script>
 </body>
 </html>
-```
-
----
-
-## 2. Crea la carpeta nueva en GitHub
-
-Tu repositorio debe tener esta estructura:
-
-```text
-REPOSITORIO/
-├── index.html
-├── music/
-│   ├── CircoAC en Bilbao.mp3
-│   ├── El_Dorado.mp3
-│   └── ...
-└── music/
-    └── nueva/
-        ├── musica.json
-        ├── CancionNueva1.mp3
-        ├── CancionNueva2.mp3
-        └── CancionNueva3.mp3
-```
-
-En realidad, como `music` ya existe, debes crear **la subcarpeta `nueva` dentro de `music`**, sin duplicar la carpeta `music`.
-
-## 3. Contenido de `musica.json`
-
-```json
-[
-  "CancionNueva1.mp3",
-  "CancionNueva2.mp3",
-  "CancionNueva3.mp3"
-]
-```
-
-Cada vez que subas otro MP3 a `music/nueva/`, añade su nombre a ese archivo JSON.
-
-## 4. Configura la dirección de GitHub
-
-Busca esta línea en el código:
-
-```javascript
-const GITHUB_BASE =
-  "https://raw.githubusercontent.com/USUARIO/REPOSITORIO/main/music/nueva/";
-```
-
-Cambia `USUARIO` por tu nombre de usuario de GitHub y `REPOSITORIO` por el nombre de tu repositorio. Si utilizas otra rama, cambia también `main`.
-
-**Importante:** para que la pestaña pueda cargar la lista desde GitHub, el repositorio debe ser accesible y la página debe ejecutarse desde una dirección web compatible. Abrir el HTML mediante doble clic puede causar problemas con algunas peticiones del navegador.
-
-Si me das la dirección de tu repositorio de GitHub, te puedo dejar la URL preparada para tu carpeta real.
