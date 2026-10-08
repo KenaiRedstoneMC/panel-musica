@@ -6,294 +6,416 @@
 <title>Panel de Música</title>
 
 <style>
-body{
-  background:#0b0f1a;
-  color:#fff;
-  font-family:Arial,sans-serif;
-  margin:0;
-  padding:0;
-}
+* { box-sizing: border-box; }
 
-html, body {
+body {
+  background: #0b0f1a;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 15px;
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
 }
 
-/* FIX iOS zoom */
-input, textarea, select {
-  font-size: 16px;
+input, button { font-size: 16px; }
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 20px;
+  background: #0b0f1a;
+  box-shadow: 0 0 25px rgba(0,0,0,.7);
+  position: relative;
+  overflow: hidden;
 }
 
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-  border-radius:20px;
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 0 25px rgba(0,0,0,.7);
-  background:#0b0f1a;
+.container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 3px;
+  background: linear-gradient(
+    90deg, #ff005c, #ffb400, #33ff5f,
+    #00d2ff, #a200ff, #ff005c
+  );
+  background-size: 300% 300%;
+  animation: led 5s linear infinite;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
-.container::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:20px;
-  padding:3px;
-  background:linear-gradient(90deg,#ff005c,#ffb400,#33ff5f,#00d2ff,#a200ff,#ff005c);
-  background-size:300% 300%;
-  animation:led 5s linear infinite;
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  mask-composite:exclude;
-  z-index:0;
+@keyframes led {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-@keyframes led{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+.container > * {
+  position: relative;
+  z-index: 1;
 }
 
-.container>*{position:relative;z-index:1}
+h1 { text-align: center; margin-bottom: 22px; }
 
-h1{text-align:center;margin-bottom:20px}
-
-.search{display:flex;justify-content:center;margin-bottom:20px}
-.search input{
-  width:60%;
-  padding:12px;
-  border-radius:12px;
-  border:none;
-  outline:none;
-  font-size:16px;
-  background:rgba(255,255,255,.1);
+.tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
 }
 
-.controls{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
+.tab {
+  padding: 12px 20px;
+  border: 1px solid #444;
+  border-radius: 12px;
+  background: #222;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-.controls button,.controls input{
-  padding:10px 15px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:bold;
+.tab.active {
+  background: #5b21b6;
+  border-color: #a855f7;
+  box-shadow: 0 0 15px #7c3aed;
 }
 
-.controls button{
-  background:#222;
-  color:#fff;
-  box-shadow:0 0 15px rgba(0,0,0,.6);
+.search {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-.controls input{
-  width:200px;
-  background:rgba(255,255,255,.1);
+.search input {
+  width: 100%;
+  max-width: 600px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #444;
+  outline: none;
+  color: white;
+  background: rgba(255,255,255,.1);
 }
 
-.music-list{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:15px;
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.song{
-  border-radius:18px;
-  padding:16px;
-  background:rgba(255,255,255,.06);
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 0 20px rgba(0,0,0,.6);
-  border:2px solid rgba(255,255,255,.12);
+.controls button,
+.song button {
+  padding: 10px 14px;
+  border: 1px solid #444;
+  border-radius: 12px;
+  cursor: pointer;
+  color: white;
+  background: #222;
 }
 
-.song::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:18px;
-  border:2px solid transparent;
-  background:linear-gradient(90deg,#ff005c,#ffb400,#33ff5f,#00d2ff,#a200ff,#ff005c);
-  background-size:300% 300%;
-  animation:led 5s linear infinite;
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  pointer-events:none;
+.controls input[type="range"] { max-width: 200px; }
+
+.music-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
 }
 
-.song>*{position:relative;z-index:1}
-.song h3{margin:0 0 12px;font-size:18px}
-
-.song button{
-  margin-right:10px;
-  background:#222;
-  color:#fff;
-  border-radius:12px;
-  padding:10px 12px;
-  cursor:pointer;
+.song {
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255,255,255,.06);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,.6);
+  border: 2px solid rgba(255,255,255,.12);
 }
 
-.song input[type=range]{width:100%;margin-top:12px}
-
-.indicator{
-  margin-top:20px;
-  font-size:26px;
-  font-weight:bold;
-  text-align:center;
-  padding:18px;
-  border-radius:16px;
-  background:rgba(255,255,255,.06);
+.song::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  border: 2px solid transparent;
+  background: linear-gradient(
+    90deg, #ff005c, #ffb400, #33ff5f,
+    #00d2ff, #a200ff, #ff005c
+  );
+  background-size: 300% 300%;
+  animation: led 5s linear infinite;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
 }
 
-.active{
-  border-color:#00ff5c!important;
-  box-shadow:0 0 25px rgba(0,255,92,.35);
+.song > * { position: relative; z-index: 1; }
+
+.song h3 {
+  margin: 0 0 12px;
+  font-size: 17px;
+  overflow-wrap: anywhere;
 }
 
-.song.active input[type=range]{accent-color:red}
+.song button { margin: 3px 5px 3px 0; }
+
+.song input[type="range"] {
+  width: 100%;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.song.active {
+  border-color: #00ff5c;
+  box-shadow: 0 0 25px rgba(0,255,92,.35);
+}
+
+.song.active input[type="range"] { accent-color: #ff005c; }
+
+.indicator {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.06);
+  overflow-wrap: anywhere;
+}
+
+.message {
+  text-align: center;
+  padding: 15px;
+  color: #ddd;
+  overflow-wrap: anywhere;
+}
+
+.help {
+  font-size: 14px;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+@media (max-width: 500px) {
+  body { padding: 6px; }
+  .container { padding: 13px; }
+  .controls { align-items: flex-start; }
+  .music-list { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-<h1>Panel de Música</h1>
 
-<div class="search">
-<input id="search" placeholder="Buscar canción...">
+<h1>🎵 Panel de Música</h1>
+
+<div class="tabs">
+  <button class="tab" id="tabBtnActual"
+          onclick="showTab('actual')">
+    🎶 Música actual
+  </button>
+
+  <button class="tab active" id="tabBtnNueva"
+          onclick="showTab('nueva')">
+    🎵 Nueva música
+  </button>
 </div>
 
 <div class="controls">
-<label>Volumen:
-<input id="volume" type="range" min="0" max="1" step="0.01" value="0.8">
-</label>
-<button id="loopAll">LOOP GENERAL: OFF</button>
+  <label>
+    Volumen general:
+    <input id="volume" type="range"
+           min="0" max="1" step="0.01" value="0.8">
+  </label>
 </div>
 
-<div class="music-list" id="musicList"></div>
-<div class="indicator" id="activeSong">Ninguna canción seleccionada</div>
+<!-- PESTAÑA DE MÚSICA ACTUAL -->
+<section id="tabActual" hidden>
+
+  <div class="search">
+    <input id="search" placeholder="Buscar canción...">
+  </div>
+
+  <div class="controls">
+    <button id="loopAll">LOOP GENERAL: OFF</button>
+  </div>
+
+  <div class="music-list" id="musicList"></div>
+
+  <div class="indicator" id="activeSong">
+    Ninguna canción seleccionada
+  </div>
+</section>
+
+<!-- PESTAÑA DE NUEVA MÚSICA DESDE GITHUB -->
+<section id="tabNueva">
+
+  <h2>🎵 Nueva música</h2>
+
+  <p class="help">
+    Esta lista es independiente de “Música actual”, pero está
+    configurada en este mismo index.html. Sube los MP3 nuevos
+    a music/ y añade sus nombres al array cancionesNuevas del código.
+  </p>
+
+  <div class="search">
+    <input id="searchNueva"
+           placeholder="Buscar nueva canción...">
+  </div>
+
+  <div class="controls">
+    <button id="reloadNueva">🔄 Actualizar lista</button>
+    <button id="loopNueva">LOOP NUEVA MÚSICA: OFF</button>
+  </div>
+
+  <div id="estadoNueva" class="message">
+    🎵 Música nueva: lista principal.
+  </div>
+
+  <div class="music-list" id="musicListNueva"></div>
+
+  <div class="indicator" id="activeSongNueva">
+    Ninguna canción seleccionada
+  </div>
+</section>
+
 </div>
 
 <script>
+/* =====================================================
+   MÚSICA NUEVA
+   Esta lista está en este mismo index.html.
+   Sube los MP3 nuevos a la carpeta music/ del repositorio
+   y escribe aquí sus nombres exactos.
+   ===================================================== */
+
+/* =====================================================
+   LISTA ORIGINAL DE CANCIONES
+   Los archivos se buscan dentro de la carpeta music/
+   ===================================================== */
+
 const songs = [
-"CircoAC en Bilbao.mp3",
-"El_Dorado.mp3",
-"Sariel.mp3",
-"Luck Ra, BM - LA MOROCHA.mp3",
-"Musica De Circo Chile MALABARES.mp3",
-"Pégate.mp3",
-"Im_Still_Standing.mp3",
-"rapido ritmo.mp3",
-"Aylex - Epic Motivation.mp3",
-"Speed Up (Luvstruck 2002).mp3",
-"ritmo bueno.mp3",
-"Proud Nation EPIC.mp3",
-"1_2_3.mp3",
-"APT. - Sped up Nightcore.mp3",
-"Alexandra Stan - Mr. Saxobeat Official Video (online-audio-converter.com).mp3",
-"Avatar_ Main Theme (Epic Version).mp3",
-"Bachelor on the move.mp3",
-"Bailes Burgaleses (feat. Guilhem Desq) - extrait du spectacle _El Último Cantar_ - Puy du Fou España.mp3",
-"Bella Donna Twist [1TgyohHqYPs].mp3",
-"Bling-Bang-Bang-Born.mp3",
-"Cars 2 ( Its Finn Mcmissile) Soundtrack [AAW2Qd9_Vt4].mp3",
-"Charleston del Siglo de Plata (feat. Richard Harvey).mp3",
-"Chayanne_-_Ay_Mama.mp3",
-"Cirque du Soleil - Irna.mp3",
-"Clouds_FYsnaLesV3o.mp3",
-"Dai Allegri Musicanti [B3PS5n-nVuc].mp3",
-"Fiesta Finale.mp3",
-"Iron_Maiden_-_The_Trooper_1998_Remastered_Version_1998_Remastered_Version_(FeelMP3.com).mp3",
-"Knife_Party_-_LRAD_Original_Mix.mp3",
-"La Invasión (feat. Pedro Eustache & London Voices).mp3",
-"Las Águilas - La Música del Espectáculo _Puy du Fou - España_.mp3",
-"Like Kids.mp3",
-"Lindsey Stirling + Alexander Jean - Stampede (Official Video).mp3",
-"Lindsey Stirling- Master Of Tides.mp3",
-"Los Gavilanes - extrait du spectacle _Cetrería de Reyes_ - Puy du Fou España.mp3",
-"Los Halcones - La Música del Espectáculo _Puy du Fou - España_.mp3",
-"Luminary.mp3",
-"MUSICA_EPICA-_two_steps_from_hell-_strenght_of_a_thousand_men_KLICKAUD.mp3",
-"Mahalageasca - Bucovina Dub.mp3",
-"Malaguena.mp3",
-"Marimba no. 7 - Luzia-yt.savetube.me.mp3",
-"Minecraft 1.21.7 New Music Disc _Lava Chicken_ [ChEkbiBzILc].mp3",
-"Most_Epic_Music_Ever___The_Wolf_And_The_Moon__BrunuhVille.mp3",
-"My_Beauty.mp3",
-"Música-para-malabares-_-Circo-_ff8nEfOyzr4_-RECORTADO-A-MEJOR-‐-Hecho-con-Clipchamp.mp3",
-"NEW__KURIOS_Music__Lyrics_-_Sing_Along_with_us_____Steampunk_Telegram____Cirque_du_Soleil_DoZ293Y1jzo.mp3",
-"Nails_Hair_Hips_Heels_Remix.mp3",
-"Party Rockin.mp3",
-"Rafaga-Mentirosa.mp3",
-"Resist and Express.mp3",
-"SI-POR-MI-FUERA-‐-Hecho-con-Clipchamp.mp3",
-"Set_Encontro_Semanal_De_Malabares_E_Circo_RJ_no1_XX.mp3",
-"SpotifyMate.com - B.B.F - KIRA.mp3",
-"Superstar I [6nSTUK75Prg].mp3",
-"TOMMY CASH - ESPRESSO MACCHIATO.mp3",
-"TUCHAT - Quevedo (Official Video).mp3",
-"The Top 40 Jugglers of 2023.mp3",
-"Two Steps From Hell - Impossible (feat. Merethe Soltvedt).mp3",
-"Two_Steps_From_Hell_-_Enchantress.mp3",
-"Two_Steps_From_Hell_-_SkyWorld_-_For_the_Win_KLICKAUD.mp3",
-"You_Must_Be_Joking.mp3",
-"You__Me_320.mp3",
-"[♪♫] Main Theme (Main Menu) _ Skylanders SuperChargers Music [FV1QbTT5hy8].mp3",
-"barefoot-adventures-128-ytshorts.savetube.me.mp3",
-"blocks-intocables.mp3",
-"el mambo.mp3",
-"epic-emotional_long-197089.mp3",
-"gurenge-lisa.mp3",
-"musica-de-circo-chile-2019-128-ytshorts.savetube.me.mp3",
-"musica-de-circo-gran-final-128-ytshorts.savetube.me.mp3",
-"musica-epica-sin-copyright-gratis-7-128-ytshorts.savetube.me.mp3",
-"musica-malabares1-‐-Hecho-con-Clipchamp.mp3",
-"stal-experience_vadim_lisikov.mp3",
-"star-wars-cantina.mp3",
-"stomps-sonic-stomps-232226.mp3",
-"thunderstruck-128-ytshorts.savetube.me.mp3",
-"ummet-ozcan-xanadu-mongolian-techno-128-ytshorts.savetube.me.mp3",
-"musica-mazas-malabares_1.mp3",
-"circo-ruso.mp3",
-"trapecio-musica.mp3",
-"Crazy Frog.mp3",
-"PreludeAndAction.mp3",
-"PartyRock.mp3",
-"SpanishFlame.mp3",
-"ShadowWarrior.mp3",
-"Adiemus.mp3",
-"Esperanza.mp3",
-"Diabolo.mp3",
-"Conquistador.mp3",
-"Legendary.mp3",
-"TheWellerman.mp3",
-"CrabRave.mp3",
-"WatUNoWen.mp3",
-"PokerFace.mp3",
-"Dardos.mp3",
-"ThankYouNotSoBad.mp3",
-"MurderInMyMind.mp3",
-"Turin.mp3",
-"Rechazame.mp3",
-"Prince Roye Carita de inocente.mp3",
-"Michael Jackson - Smooth Criminal.mp3",
-"musica relajante 1.mp3",
-  // NEOMAK
-"GALDERA IKURRAK neomak.mp3",
-"Ilargi Berriak neomak.mp3",
+  "CircoAC en Bilbao.mp3",
+  "El_Dorado.mp3",
+  "Sariel.mp3",
+  "Luck Ra, BM - LA MOROCHA.mp3",
+  "Musica De Circo Chile MALABARES.mp3",
+  "Pégate.mp3",
+  "Im_Still_Standing.mp3",
+  "rapido ritmo.mp3",
+  "Aylex - Epic Motivation.mp3",
+  "Speed Up (Luvstruck 2002).mp3",
+  "ritmo bueno.mp3",
+  "Proud Nation EPIC.mp3",
+  "1_2_3.mp3",
+  "APT. - Sped up Nightcore.mp3",
+  "Alexandra Stan - Mr. Saxobeat Official Video (online-audio-converter.com).mp3",
+  "Avatar_ Main Theme (Epic Version).mp3",
+  "Bachelor on the move.mp3",
+  "Bailes Burgaleses (feat. Guilhem Desq) - extrait du spectacle _El Último Cantar_ - Puy du Fou España.mp3",
+  "Bella Donna Twist [1TgyohHqYPs].mp3",
+  "Bling-Bang-Bang-Born.mp3",
+  "Cars 2 ( Its Finn Mcmissile) Soundtrack [AAW2Qd9_Vt4].mp3",
+  "Charleston del Siglo de Plata (feat. Richard Harvey).mp3",
+  "Chayanne_-_Ay_Mama.mp3",
+  "Cirque du Soleil - Irna.mp3",
+  "Clouds_FYsnaLesV3o.mp3",
+  "Dai Allegri Musicanti [B3PS5n-nVuc].mp3",
+  "Fiesta Finale.mp3",
+  "Iron_Maiden_-_The_Trooper_1998_Remastered_Version_1998_Remastered_Version_(FeelMP3.com).mp3",
+  "Knife_Party_-_LRAD_Original_Mix.mp3",
+  "La Invasión (feat. Pedro Eustache & London Voices).mp3",
+  "Las Águilas - La Música del Espectáculo _Puy du Fou - España_.mp3",
+  "Like Kids.mp3",
+  "Lindsey Stirling + Alexander Jean - Stampede (Official Video).mp3",
+  "Lindsey Stirling- Master Of Tides.mp3",
+  "Los Gavilanes - extrait du spectacle _Cetrería de Reyes_ - Puy du Fou España.mp3",
+  "Los Halcones - La Música del Espectáculo _Puy du Fou - España_.mp3",
+  "Luminary.mp3",
+  "MUSICA_EPICA-_two_steps_from_hell-_strenght_of_a_thousand_men_KLICKAUD.mp3",
+  "Mahalageasca - Bucovina Dub.mp3",
+  "Malaguena.mp3",
+  "Marimba no. 7 - Luzia-yt.savetube.me.mp3",
+  "Minecraft 1.21.7 New Music Disc _Lava Chicken_ [ChEkbiBzILc].mp3",
+  "Most_Epic_Music_Ever___The_Wolf_And_The_Moon__BrunuhVille.mp3",
+  "My_Beauty.mp3",
+  "Música-para-malabares-_-Circo-_ff8nEfOyzr4_-RECORTADO-A-MEJOR-‐-Hecho-con-Clipchamp.mp3",
+  "NEW__KURIOS_Music__Lyrics_-_Sing_Along_with_us_____Steampunk_Telegram____Cirque_du_Soleil_DoZ293Y1jzo.mp3",
+  "Nails_Hair_Hips_Heels_Remix.mp3",
+  "Party Rockin.mp3",
+  "Rafaga-Mentirosa.mp3",
+  "Resist and Express.mp3",
+  "SI-POR-MI-FUERA-‐-Hecho-con-Clipchamp.mp3",
+  "Set_Encontro_Semanal_De_Malabares_E_Circo_RJ_no1_XX.mp3",
+  "SpotifyMate.com - B.B.F - KIRA.mp3",
+  "Superstar I [6nSTUK75Prg].mp3",
+  "TOMMY CASH - ESPRESSO MACCHIATO.mp3",
+  "TUCHAT - Quevedo (Official Video).mp3",
+  "The Top 40 Jugglers of 2023.mp3",
+  "Two Steps From Hell - Impossible (feat. Merethe Soltvedt).mp3",
+  "Two_Steps_From_Hell_-_Enchantress.mp3",
+  "Two_Steps_From_Hell_-_SkyWorld_-_For_the_Win_KLICKAUD.mp3",
+  "You_Must_Be_Joking.mp3",
+  "You__Me_320.mp3",
+  "[♪♫] Main Theme (Main Menu) _ Skylanders SuperChargers Music [FV1QbTT5hy8].mp3",
+  "barefoot-adventures-128-ytshorts.savetube.me.mp3",
+  "blocks-intocables.mp3",
+  "el mambo.mp3",
+  "epic-emotional_long-197089.mp3",
+  "gurenge-lisa.mp3",
+  "musica-de-circo-chile-2019-128-ytshorts.savetube.me.mp3",
+  "musica-de-circo-gran-final-128-ytshorts.savetube.me.mp3",
+  "musica-epica-sin-copyright-gratis-7-128-ytshorts.savetube.me.mp3",
+  "musica-malabares1-‐-Hecho-con-Clipchamp.mp3",
+  "stal-experience_vadim_lisikov.mp3",
+  "star-wars-cantina.mp3",
+  "stomps-sonic-stomps-232226.mp3",
+  "thunderstruck-128-ytshorts.savetube.me.mp3",
+  "ummet-ozcan-xanadu-mongolian-techno-128-ytshorts.savetube.me.mp3",
+  "musica-mazas-malabares_1.mp3",
+  "circo-ruso.mp3",
+  "trapecio-musica.mp3",
+  "Crazy Frog.mp3",
+  "PreludeAndAction.mp3",
+  "PartyRock.mp3",
+  "SpanishFlame.mp3",
+  "ShadowWarrior.mp3",
+  "Adiemus.mp3",
+  "Esperanza.mp3",
+  "Diabolo.mp3",
+  "Conquistador.mp3",
+  "Legendary.mp3",
+  "TheWellerman.mp3",
+  "CrabRave.mp3",
+  "WatUNoWen.mp3",
+  "PokerFace.mp3",
+  "Dardos.mp3",
+  "ThankYouNotSoBad.mp3",
+  "MurderInMyMind.mp3",
+  "Turin.mp3",
+  "Rechazame.mp3",
+  "Prince Roye Carita de inocente.mp3",
+  "Michael Jackson - Smooth Criminal.mp3",
+  "musica relajante 1.mp3",
+  "GALDERA IKURRAK neomak.mp3",
+  "Ilargi Berriak neomak.mp3"
+].sort((a, b) => a.localeCompare(b, "es"));
 
-];
-
-songs.sort();
-
-let currentAudio = null;
-let loopMode = false;
-let audioList = [];
+/* =====================================================
+   VARIABLES Y ELEMENTOS
+   ===================================================== */
 
 const musicList = document.getElementById("musicList");
 const activeSong = document.getElementById("activeSong");
@@ -301,25 +423,276 @@ const volume = document.getElementById("volume");
 const search = document.getElementById("search");
 const loopAll = document.getElementById("loopAll");
 
-function formatTime(sec){
-  const m = Math.floor(sec/60);
-  const s = Math.floor(sec%60);
-  return `${m}:${s<10?"0"+s:s}`;
+const musicListNueva = document.getElementById("musicListNueva");
+const activeSongNueva = document.getElementById("activeSongNueva");
+const searchNueva = document.getElementById("searchNueva");
+const estadoNueva = document.getElementById("estadoNueva");
+
+let currentAudio = null;
+let currentAudioTab = "actual";
+let loopMode = false;
+let loopNueva = false;
+let audioList = [];
+let audioListNueva = [];
+let cancionesNuevas = [
+  { archivo: "Cotton Eye Joe - Rednex (Lyrics).mp3", titulo: "Cotton Eye Joe - Rednex (Lyrics)" },
+  { archivo: "Jumpin' Jack (Album Version).mp3", titulo: "Jumpin' Jack (Album Version)" },
+  { archivo: "King Of Swing (Album Version).mp3", titulo: "King Of Swing (Album Version)" },
+  { archivo: "Mambo Swing (Album Version).mp3", titulo: "Mambo Swing (Album Version)" },
+  { archivo: "Mr. Pinstripe Suit.mp3", titulo: "Mr. Pinstripe Suit" },
+  { archivo: "Música de Circo - Malabares/Juggler.mp3", titulo: "Música de Circo - Malabares/Juggler" },
+  { archivo: "Musica De Circo MALABARES.mp3", titulo: "Musica De Circo MALABARES" },
+  { archivo: "Música para malabares / Circo.mp3", titulo: "Música para malabares / Circo" },
+  { archivo: "Victory 10.mp3", titulo: "Victory 10" },
+  { archivo: "Yakety Sax- Music.mp3", titulo: "Yakety Sax- Music" },
+  { archivo: "You & Me.mp3", titulo: "You & Me" },
+  { archivo: "メカリアレンジ Moon Over The Castle.mp3", titulo: "メカリアレンジ Moon Over The Castle" },
+  { archivo: "Dapper's Groove.mp3", titulo: "Dapper's Groove" },
+  { archivo: "Day & Night.mp3", titulo: "Day & Night" },
+  { archivo: "El Conquistador.mp3", titulo: "El Conquistador" },
+  { archivo: "El Mambo.mp3", titulo: "El Mambo" },
+  { archivo: "Extra Fries.mp3", titulo: "Extra Fries" },
+  { archivo: "Glitz At The Ritz.mp3", titulo: "Glitz At The Ritz" },
+  { archivo: "Hit the Road Jack.mp3", titulo: "Hit the Road Jack" },
+  { archivo: "It Means A Thing If You Swing.mp3", titulo: "It Means A Thing If You Swing" },
+  { archivo: "It's Almost Spring Back Home.mp3", titulo: "It's Almost Spring Back Home" },
+  { archivo: "Ninja.mp3", titulo: "Ninja" },
+  { archivo: "Rico's Groove.mp3", titulo: "Rico's Groove" },
+  { archivo: "Spanish Flame.mp3", titulo: "Spanish Flame" },
+  { archivo: "Spicy Sound.mp3", titulo: "Spicy Sound" },
+  { archivo: "Take the Night.mp3", titulo: "Take the Night" },
+  { archivo: "What's Next ? (Album Version).mp3", titulo: "What's Next ? (Album Version)" },
+  { archivo: "とれおすBACANO!—OP.mp3", titulo: "とれおすBACANO!—OP" },
+  { archivo: "Esperanza.mp3", titulo: "Esperanza" },
+  { archivo: "The Arena.mp3", titulo: "The Arena" },
+  { archivo: "Bob Bradley, Nick McEnaly, Josh Weller - Disarm (Real Racing 3 Trailer).mp3", titulo: "Bob Bradley, Nick McEnaly, Josh Weller - Disarm (Real Racing 3 Trailer)" },
+  { archivo: "Flying.mp3", titulo: "Flying" },
+  { archivo: "Great Spirit (Extended Mix).mp3", titulo: "Great Spirit (Extended Mix)" },
+  { archivo: "Indigène.mp3", titulo: "Indigène" },
+  { archivo: "Le retour de d'Artagnan.mp3", titulo: "Le retour de d'Artagnan" },
+  { archivo: "MEGALOVANIA.mp3", titulo: "MEGALOVANIA" }
+];
+let nuevaMusicaCargada = false;
+let peticionNueva = 0;
+
+/* =====================================================
+   FUNCIONES GENERALES
+   ===================================================== */
+
+function formatTime(sec) {
+  sec = Number.isFinite(sec) ? sec : 0;
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m}:${s < 10 ? "0" + s : s}`;
 }
 
-function renderSongs(filter=""){
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+}
+
+function stopOtherAudios(audio) {
+  [...audioList, ...audioListNueva].forEach(a => {
+    if (a !== audio) {
+      a.pause();
+      a.currentTime = 0;
+    }
+  });
+}
+
+function setActive(div, song) {
+  document.querySelectorAll(".song").forEach(el => {
+    el.classList.remove("active");
+  });
+
+  div.classList.add("active");
+  activeSong.textContent = `🎵 Reproduciendo: ${song}`;
+}
+
+function clearActive() {
+  document.querySelectorAll("#musicList .song").forEach(el => {
+    el.classList.remove("active");
+  });
+
+  activeSong.textContent = "Ninguna canción seleccionada";
+}
+
+function clearActiveNueva() {
+  document.querySelectorAll("#musicListNueva .song").forEach(el => {
+    el.classList.remove("active");
+  });
+
+  activeSongNueva.textContent = "Ninguna canción seleccionada";
+}
+
+/* =====================================================
+   CAMBIO DE PESTAÑAS
+   ===================================================== */
+
+function showTab(tab) {
+  const esActual = tab === "actual";
+
+  document.getElementById("tabActual").hidden = !esActual;
+  document.getElementById("tabNueva").hidden = esActual;
+
+  document.getElementById("tabBtnActual")
+    .classList.toggle("active", esActual);
+
+  document.getElementById("tabBtnNueva")
+    .classList.toggle("active", !esActual);
+
+  if (!esActual) {
+    cargarNuevaMusica();
+  }
+}
+
+/* =====================================================
+   REPRODUCTOR DE MÚSICA ACTUAL
+   ===================================================== */
+
+function renderSongs(filter = "") {
   musicList.innerHTML = "";
   audioList = [];
 
   songs
-  .filter(s => s.toLowerCase().includes(filter.toLowerCase()))
-  .forEach(song => {
+    .filter(song => song.toLowerCase().includes(filter.toLowerCase()))
+    .forEach(song => {
+      const div = document.createElement("div");
+      div.className = "song";
 
+      const h = document.createElement("h3");
+      h.textContent = song;
+
+      const play = document.createElement("button");
+      play.textContent = "PLAY";
+
+      const stop = document.createElement("button");
+      stop.textContent = "STOP";
+
+      const bar = document.createElement("input");
+      bar.type = "range";
+      bar.min = 0;
+      bar.max = 100;
+      bar.value = 0;
+      bar.setAttribute("aria-label", "Progreso de " + song);
+
+      const time = document.createElement("div");
+      time.textContent = "0:00 / 0:00";
+
+      const audio = new Audio("music/" + encodeURIComponent(song));
+      audio.preload = "none";
+      audio.volume = Number(volume.value);
+      audio.loop = loopMode;
+
+      audioList.push(audio);
+
+      div.append(h, play, stop, bar, time);
+      musicList.appendChild(div);
+
+      play.onclick = async () => {
+        stopOtherAudios(audio);
+        currentAudio = audio;
+        currentAudioTab = "actual";
+        audio.loop = loopMode;
+
+        try {
+          await audio.play();
+          setActive(div, song);
+        } catch (error) {
+          activeSong.textContent =
+            "No se pudo reproducir. Comprueba que existe music/" + song;
+        }
+      };
+
+      stop.onclick = () => {
+        audio.pause();
+        audio.currentTime = 0;
+        bar.value = 0;
+
+        if (currentAudio === audio) {
+          currentAudio = null;
+        }
+
+        div.classList.remove("active");
+        activeSong.textContent = "Ninguna canción seleccionada";
+        time.textContent = "0:00 / " + formatTime(audio.duration);
+      };
+
+      audio.ontimeupdate = () => {
+        bar.value = audio.duration
+          ? (audio.currentTime / audio.duration) * 100
+          : 0;
+
+        time.textContent =
+          `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+      };
+
+      audio.onended = () => {
+        div.classList.remove("active");
+      };
+
+      audio.onerror = () => {
+        time.textContent = "No se pudo cargar el archivo de music/";
+      };
+
+      bar.oninput = () => {
+        if (audio.duration) {
+          audio.currentTime = (Number(bar.value) / 100) * audio.duration;
+        }
+      };
+    });
+}
+
+search.oninput = event => renderSongs(event.target.value);
+
+loopAll.onclick = () => {
+  loopMode = !loopMode;
+  loopAll.textContent = `LOOP GENERAL: ${loopMode ? "ON" : "OFF"}`;
+
+  audioList.forEach(audio => {
+    audio.loop = loopMode;
+  });
+};
+
+/* =====================================================
+   NUEVA MÚSICA DESDE GITHUB
+   musica.json debe contener una lista de nombres MP3.
+   ===================================================== */
+
+function cargarNuevaMusica(forzar = false) {
+  // La lista nueva está escrita en este mismo index.html.
+  // No necesita musica.json ni una carpeta nueva.
+  nuevaMusicaCargada = true;
+  estadoNueva.textContent = cancionesNuevas.length
+    ? `${cancionesNuevas.length} canciones en la lista de nueva música.`
+    : "Añade canciones en el array cancionesNuevas del código.";
+  renderNuevaMusica(searchNueva.value);
+}
+
+function renderNuevaMusica(filter = "") {
+  musicListNueva.innerHTML = "";
+  audioListNueva = [];
+
+  const filtradas = cancionesNuevas.filter(c =>
+    c.titulo.toLowerCase().includes(filter.toLowerCase()) ||
+    c.archivo.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  if (!filtradas.length) {
+    musicListNueva.innerHTML =
+      '<p class="message">No hay canciones que coincidan con la búsqueda.</p>';
+    return;
+  }
+
+  filtradas.forEach(cancion => {
     const div = document.createElement("div");
     div.className = "song";
 
     const h = document.createElement("h3");
-    h.textContent = song;
+    h.textContent = cancion.titulo;
 
     const play = document.createElement("button");
     play.textContent = "PLAY";
@@ -331,76 +704,116 @@ function renderSongs(filter=""){
     bar.type = "range";
     bar.min = 0;
     bar.max = 100;
+    bar.value = 0;
+    bar.setAttribute("aria-label", "Progreso de " + cancion.titulo);
 
     const time = document.createElement("div");
     time.textContent = "0:00 / 0:00";
 
-    div.append(h,play,stop,bar,time);
-    musicList.appendChild(div);
+    const audio = new Audio(
+      "music/" + cancion.archivo.split("/").map(encodeURIComponent).join("/")
+    );
 
-    const audio = new Audio(`music/${song}`);
-    audio.volume = volume.value;
-    audio.loop = loopMode;
+    audio.preload = "none";
+    audio.volume = Number(volume.value);
+    audio.loop = loopNueva;
+    audioListNueva.push(audio);
 
-    audioList.push(audio);
+    div.append(h, play, stop, bar, time);
+    musicListNueva.appendChild(div);
 
-    play.onclick = () => {
-      if(currentAudio && currentAudio !== audio){
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
-      }
-
+    play.onclick = async () => {
+      stopOtherAudios(audio);
       currentAudio = audio;
-      audio.loop = loopMode;
-      audio.play();
+      currentAudioTab = "nueva";
+      audio.loop = loopNueva;
 
-      setActive(div,song);
+      try {
+        await audio.play();
 
-      audio.ontimeupdate = () => {
-        bar.value = (audio.currentTime / audio.duration) * 100 || 0;
-        time.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration || 0)}`;
-      };
+        document.querySelectorAll(".song").forEach(el => {
+          el.classList.remove("active");
+        });
+
+        div.classList.add("active");
+        activeSongNueva.textContent =
+          "🎵 Reproduciendo: " + cancion.titulo;
+      } catch (error) {
+        activeSongNueva.textContent =
+          "No se pudo reproducir. Comprueba que el MP3 existe en la carpeta music/.";
+      }
     };
 
     stop.onclick = () => {
       audio.pause();
       audio.currentTime = 0;
       bar.value = 0;
-      clearActive();
+      div.classList.remove("active");
+
+      if (currentAudio === audio) {
+        currentAudio = null;
+      }
+
+      activeSongNueva.textContent = "Ninguna canción seleccionada";
+      time.textContent = "0:00 / " + formatTime(audio.duration);
+    };
+
+    audio.ontimeupdate = () => {
+      bar.value = audio.duration
+        ? (audio.currentTime / audio.duration) * 100
+        : 0;
+
+      time.textContent =
+        `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+    };
+
+    audio.onended = () => {
+      div.classList.remove("active");
+    };
+
+    audio.onerror = () => {
+      time.textContent = "No se pudo cargar el archivo de music/";
     };
 
     bar.oninput = () => {
-      if(audio.duration)
-        audio.currentTime = (bar.value/100)*audio.duration;
-    };
-
-    volume.oninput = e => {
-      audio.volume = e.target.value;
+      if (audio.duration) {
+        audio.currentTime = (Number(bar.value) / 100) * audio.duration;
+      }
     };
   });
 }
 
-function setActive(div,song){
-  document.querySelectorAll(".song").forEach(s => s.classList.remove("active"));
-  div.classList.add("active");
-  activeSong.textContent = `🎵 Reproduciendo: ${song}`;
-}
-
-function clearActive(){
-  document.querySelectorAll(".song").forEach(s => s.classList.remove("active"));
-  activeSong.textContent = "Ninguna canción seleccionada";
-}
-
-search.oninput = e => renderSongs(e.target.value);
-
-loopAll.onclick = () => {
-  loopMode = !loopMode;
-  loopAll.textContent = `LOOP GENERAL: ${loopMode ? "ON" : "OFF"}`;
-
-  audioList.forEach(a => a.loop = loopMode);
+searchNueva.oninput = event => {
+  renderNuevaMusica(event.target.value);
 };
 
+document.getElementById("reloadNueva").onclick = () => {
+  nuevaMusicaCargada = false;
+  cargarNuevaMusica(true);
+};
+
+document.getElementById("loopNueva").onclick = event => {
+  loopNueva = !loopNueva;
+  event.currentTarget.textContent =
+    `LOOP NUEVA MÚSICA: ${loopNueva ? "ON" : "OFF"}`;
+
+  audioListNueva.forEach(audio => {
+    audio.loop = loopNueva;
+  });
+};
+
+/* Volumen compartido por las dos pestañas */
+volume.oninput = event => {
+  const nuevoVolumen = Number(event.target.value);
+
+  [...audioList, ...audioListNueva].forEach(audio => {
+    audio.volume = nuevoVolumen;
+  });
+};
+
+/* Inicializar las dos listas; abrir Nueva música como inicio */
 renderSongs();
+showTab("nueva");
 </script>
 </body>
 </html>
